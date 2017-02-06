@@ -7,11 +7,14 @@ import java.awt.EventQueue;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
@@ -53,13 +56,41 @@ public class Creator extends JFrame {
 		
 		createMenuBar();
 		
-		//Button createSwatch = new Button("Create Swatch");
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-		makeButton("Create Swatch");
-		makeButton("Test Button");
-		makeButton("Another Test");
+		
+		//Creating Buttons
+		JButton createSwatch = new JButton("Create Swatch");
+		createSwatch.setActionCommand("Create Swatch");
+		createSwatch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				Palette newPalette = new Palette();
+			}
+		});
+		add(createSwatch);
+		
+		JButton aboutMe = new JButton("About");
+		aboutMe.setActionCommand("About");
+		aboutMe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				
+				JFrame frame = new JFrame();
+				
+				JOptionPane.showMessageDialog(frame,
+					    "Thanks for checking out this little program.\n" +
+					    		"You can go ahead and call me 404. This program was written as a test" +
+					    		" to get used to writing GUIs again.\nI hope it's useful to you, because" +
+					    		" it was a really difficult to write program!\nI don't plan on making many" +
+					    		" updates unless it's of particular use to anyone, so if you would like more" +
+					    		" please let me know. Thanks! -404");
+				
+				
+			}
+		});
+		add(aboutMe);
+		
+		//Main frame
 		setTitle("Color Swatch Generator");
-		setSize(500,500);
+		setSize(500,300);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
@@ -106,7 +137,9 @@ public class Creator extends JFrame {
 		
 	}
 	
-	
+	/*
+	 * Delete this method
+	 */
 	private void makeButton(String name){
 		//getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));		
 		JButton newButton = new JButton(name);
