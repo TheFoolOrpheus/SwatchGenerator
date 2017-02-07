@@ -5,10 +5,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import static java.lang.Integer.parseInt;
 
 /**
  * The window that pops up when you click on "Create Swatch".
@@ -76,6 +76,7 @@ public class Palette extends JFrame {
 		monochrome.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				isPastel();
+				paletteNumber();
 			}
 		});
 		add(monochrome, constraints);
@@ -146,10 +147,97 @@ public class Palette extends JFrame {
 		
 		return pastel;
 	}
-	
+
+	/**
+	 *
+	 * A way to know how many colors the user wants. The current system will do 3, 4, 5, 6, 16, and custom.
+	 *
+	 * The system will then create that number of colors. Within the menu for the different palettes,
+	 * it will have to use mod to determine whether a number is odd or even, but this method only determines the
+	 * color #.
+	 *
+	 * @return colors the number of colors in the palette
+	 */
+
 	private int paletteNumber(){
-		
-		return 0;
+		int colors = 0;
+
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(HIDE_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		frame.setAlwaysOnTop(true);
+		int opt = 0;
+
+		String[] options = { "3", "4", "5", "6", "16", "custom" };
+		opt = JOptionPane.showOptionDialog(frame, "Please choose the size of your palette.", "Number of colors",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+				null, options, options[0]);
+
+		switch (opt){
+			case 0:
+				JOptionPane.showMessageDialog(frame, "Generating swatch with 3 " +
+						"colors.");
+
+				colors = 3;
+				break;
+			case 1:
+				JOptionPane.showMessageDialog(frame, "Generating swatch with 4 " +
+						"colors.");
+				colors = 4;
+				break;
+			case 2:
+				JOptionPane.showMessageDialog(frame, "Generating swatch with 5 " +
+						"colors.");
+				colors = 5;
+				break;
+			case 3:
+				JOptionPane.showMessageDialog(frame, "Generating swatch with 6 " +
+						"colors.");
+				colors = 6;
+				break;
+			case 4:
+				JOptionPane.showMessageDialog(frame, "Generating swatch with 16 " +
+						"color.");
+
+				colors = 16;
+				break;
+			case 5:
+				String customNumber = "";
+				//JOptionPane.showMessageDialog(frame, "This is for custom colors. Currently returns 3.");
+				customNumber = JOptionPane.showInputDialog(frame, "Enter the number of colors you " +
+				"would like to generate.", "Custom Value", JOptionPane.PLAIN_MESSAGE);
+
+				try{
+					int testing;
+
+					testing = parseInt(customNumber);
+
+					JOptionPane.showMessageDialog(frame, "Generating swatch with " + testing +
+							" colors.");
+
+					colors = testing;
+				}
+				catch (NumberFormatException nfe){
+					JOptionPane.showMessageDialog(frame, "This is not a number value." +
+					"\nDefaulting to 3 colors.");
+					colors = 3;
+				}
+				catch(Exception e){
+					JOptionPane.showMessageDialog(frame, "This is not a number value." +
+							"\nDefaulting to 3 colors.");
+					colors = 3;
+				}
+				//colors = 3;
+				break;
+			default:
+				JOptionPane.showMessageDialog(frame, "Defaulting to swatch with 4 " +
+						"colors.");
+				colors = 4;
+				break;
+		}
+
+
+		return colors;
 	}
 	
 
