@@ -61,6 +61,7 @@ public class Creator extends JFrame {
 		//Creating Buttons
 		JButton createSwatch = new JButton("Create Swatch");
 		createSwatch.setActionCommand("Create Swatch");
+		createSwatch.setAlignmentX(CENTER_ALIGNMENT);
 		createSwatch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				Palette newPalette = new Palette();
@@ -70,6 +71,7 @@ public class Creator extends JFrame {
 		
 		JButton aboutMe = new JButton("About");
 		aboutMe.setActionCommand("About");
+		aboutMe.setAlignmentX(CENTER_ALIGNMENT);
 		aboutMe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				
