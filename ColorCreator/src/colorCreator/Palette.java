@@ -25,6 +25,8 @@ import static java.lang.Integer.parseInt;
  *
  */
 public class Palette extends JFrame {
+
+	boolean complementary = false;
 	
 	public Palette(){
 		
@@ -58,6 +60,15 @@ public class Palette extends JFrame {
 		if(shouldFill){
 			constraints.fill = GridBagConstraints.HORIZONTAL;
 		}
+
+		/*
+		 * The frame used for dialog boxes when buttons are being pressed.
+		 */
+		JFrame frame = new JFrame();
+		frame.setAlwaysOnTop(true);
+		frame.setDefaultCloseOperation(HIDE_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+
 				
 		/*
 		 * Creating the monochrome button. Should pass isPastel and
@@ -72,11 +83,12 @@ public class Palette extends JFrame {
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
 		//constraints.fill = GridBagConstraints.HORIZONTAL;
 		monochrome.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				isPastel();
-				paletteNumber();
+				MonochromeSwatch ms = new MonochromeSwatch(paletteNumber(), complementary);
+
 			}
 		});
 		add(monochrome, constraints);
@@ -93,6 +105,7 @@ public class Palette extends JFrame {
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		constraints.gridwidth = GridBagConstraints.RELATIVE;
+		constraints.gridheight = 1;
 		//constraints.fill = GridBagConstraints.HORIZONTAL;
 		adjacent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -100,6 +113,50 @@ public class Palette extends JFrame {
 			}
 		});
 		add(adjacent, constraints);
+
+
+		/*
+		 * Creating a Triad color button. Should pass isPastel and
+		 *  paletteNumber to the adjacent class.
+		 */
+		JButton triad = new JButton("Triad");
+		triad.setActionCommand("Triad");
+		if(shouldWeightX){
+			constraints.weightx = 0.5;
+		}
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		constraints.gridwidth = GridBagConstraints.RELATIVE;
+		constraints.gridheight = 1;
+		//constraints.fill = GridBagConstraints.HORIZONTAL;
+		adjacent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				isPastel();
+			}
+		});
+		add(triad, constraints);
+
+
+		JButton compColor = new JButton("Complementary Color");
+		compColor.setActionCommand("Complementary Color");
+		if(shouldWeightX){
+			constraints.weightx = 0.5;
+		}
+		constraints.gridx = 0;
+		constraints.gridy = 2;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		compColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				complementaryOn();
+				if(complementary == true) {
+					JOptionPane.showMessageDialog(frame, "Complementary colors on.");
+				}
+				else{
+					JOptionPane.showMessageDialog(frame, "Complementary colors off.");
+				}
+			}
+		});
+		add(compColor);
 	}
 	
 	
@@ -238,6 +295,27 @@ public class Palette extends JFrame {
 
 
 		return colors;
+	}
+
+	/**
+	 * When this is turned on it changes the way the swatches work.
+	 *
+	 * If activated:
+	 * - Monochrome only prints two colors: the shade and it's complementary color.
+	 * - Adjacent adds one more color to the palette-- the base color's complementary color.
+	 * - Triad switches to Complementary Triad.
+	 * - Does not affect Multi-color.
+	 *
+	 */
+	private void complementaryOn(){
+
+		if(complementary == false){
+			complementary = true;
+		}
+		else if (complementary == true){
+			complementary = false;
+		}
+
 	}
 	
 

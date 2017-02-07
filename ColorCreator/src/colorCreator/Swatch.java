@@ -61,6 +61,20 @@ public interface Swatch {
     }
 
     /**
+     * Changes a hex string to a int [] representing the R, G, and B values
+     * @param hex a hexcode
+     * @return RGB an int array with r, g, and b values
+     */
+    default int[] hexToDecimal(String hex){
+        int[] RGB = new int[3];
+        RGB[0] = Integer.parseInt(hex.substring(0,2), 16);
+        RGB[1] = Integer.parseInt(hex.substring(2,4), 16);
+        RGB[2] = Integer.parseInt(hex.substring(4), 16);
+
+        return RGB;
+    }
+
+    /**
      * Chooses a random color for the user.
      * @return color a random color
      */
@@ -89,12 +103,93 @@ public interface Swatch {
     default boolean isOdd(int number){
 
         if(number%2 == 0){
-            return true;
-        }
-        else {
             return false;
         }
+        else {
+            return true;
+        }
     }
+
+    /**
+     *
+     * Allows the user to choose a color. If the information entered is unusable, then returns null.
+     *
+     * @return a color or null
+     */
+    default Color chooseColor(){
+
+        int opt = 0;
+        String options[] = {"RGB", "Hexcode"};
+        opt = JOptionPane.showOptionDialog(null, "Choose a method for entry.", "Base color",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+        switch(opt) {
+            case 0:
+                /*
+                 * I would like to use the regular expressions \p{punct} and \p{blank} so that spaces can be used as
+                 * well, but for right now let's just stick with this particular implementation.
+                 */
+                String RGBval;
+                RGBval = JOptionPane.showInputDialog(null, "Enter the RGB value of your" +
+                                " color.\nSeparate the values with a \",\" and do not use spaces, like so:\n 10,10,10",
+                        "Hexcode", JOptionPane.PLAIN_MESSAGE);
+                String RGB[] = RGBval.split(",");
+
+                try {
+                    Color color = new Color(Integer.parseInt(RGB[0]), Integer.parseInt(RGB[1]), Integer.parseInt(RGB[2]));
+                    return color;
+                } catch (Exception e) {
+                    System.err.println("Length of RGB[]: " + RGB.length + "\nItems in RGB[0], RGB[1], and RGB[2]:" +
+                            RGB[0] + " " + RGB[1] + " " + RGB[2] + ".");
+                }
+
+                break;
+            case 1:
+                String hexcode;
+                hexcode = JOptionPane.showInputDialog(null, "Enter the hexcode value of your" +
+                        " color.", "Hexcode", JOptionPane.PLAIN_MESSAGE);
+
+                int[] RGBint = new int[0];
+                try {
+                    RGBint = hexToDecimal(hexcode);
+                    Color color = new Color(RGBint[0], RGBint[1], RGBint[2]);
+                    return color;
+                } catch (Exception e) {
+                    System.err.println("Length of RGBint[]: " + RGBint.length + "\nItems in RGBint[0], RGBint[1], and RGBint[2]:" +
+                            RGBint[0] + " " + RGBint[1] + " " + RGBint[2] + ".");
+                }
+
+                break;
+            default:
+
+                break;
+        }
+        return null;
+    }
+
+    /**
+     * The method that computes the colors being created.
+     * @return an array of colors
+     */
+    Color[] createColors();
+
+    /**
+     * Allows the user to determine the percentage of white to add to the colors in question.
+     * Uses a float because decimal places... might switch to a double, I don't need repeating
+     * numbers all over the place.
+     * @param factor the percentage of white being added to the color
+     * @return a lighter color.
+     */
+    Color brightenBy(float factor);
+
+    /**
+     * Allows the user to determine the percentage of black to add to the colors in question.
+     * Uses a float because decimal places... might switch to a double, I don't need repeating
+     * numbers all over the place.
+     * @param factor the percentage of black being added to the color
+     * @return a darker color.
+     */
+    Color darkenBy(float factor);
 
 
 
