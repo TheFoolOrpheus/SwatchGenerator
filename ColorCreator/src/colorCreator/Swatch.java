@@ -171,7 +171,7 @@ public interface Swatch {
      * The method that computes the colors being created.
      * @return an array of colors
      */
-    Color[] createColors();
+    Color[] createColors(Color color);
 
     /**
      * Allows the user to determine the percentage of white to add to the colors in question.
@@ -180,7 +180,7 @@ public interface Swatch {
      * @param factor the percentage of white being added to the color
      * @return a lighter color.
      */
-    Color brightenBy(float factor);
+    Color brightenBy(Color color, float factor);
 
     /**
      * Allows the user to determine the percentage of black to add to the colors in question.
@@ -189,7 +189,7 @@ public interface Swatch {
      * @param factor the percentage of black being added to the color
      * @return a darker color.
      */
-    Color darkenBy(float factor);
+    Color darkenBy(Color color, float factor);
 
 
 

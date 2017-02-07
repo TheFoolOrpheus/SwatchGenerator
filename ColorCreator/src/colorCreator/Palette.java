@@ -5,9 +5,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+
 import static java.lang.Integer.parseInt;
 
 /**
@@ -43,18 +42,28 @@ public class Palette extends JFrame {
 		 */
 		boolean shouldFill = true;
 		boolean shouldWeightX = true;
+
+        /*
+         * Testing some GridBag stuff
+         */
+		GridBagLayout gridBag = new GridBagLayout();
+		GridBagLayout colorPaneLayout = new GridBagLayout();
+		JPanel panel = new JPanel();
 		
 		/*
 		 * Creating the frame, which I might have to make non-resizable.
 		 * The layout is GridBag.
 		 */
 		setTitle("Swatch Creator");
-		setSize(1000,1000);
+		//Prev. size 1000 x 1000
+		setSize(500,500);
 		setLocationRelativeTo(null);
 		setAlwaysOnTop(true);
 		setVisible(true);
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
-		setLayout(new GridBagLayout());
+		setResizable(false);
+		setLayout(gridBag);
+		gridBag.layoutContainer(this);
 		GridBagConstraints constraints = new GridBagConstraints();
 		setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		if(shouldFill){
@@ -84,14 +93,14 @@ public class Palette extends JFrame {
 		constraints.gridy = 0;
 		constraints.gridwidth = 1;
 		constraints.gridheight = 1;
-		//constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.fill = GridBagConstraints.BOTH;
 		monochrome.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				MonochromeSwatch ms = new MonochromeSwatch(paletteNumber(), complementary);
 
 			}
 		});
-		add(monochrome, constraints);
+        add(monochrome, constraints);
 		
 		/*
 		 * Creating a adjacent color button. Should pass isPastel and
@@ -124,17 +133,22 @@ public class Palette extends JFrame {
 		if(shouldWeightX){
 			constraints.weightx = 0.5;
 		}
-		constraints.gridx = 1;
+		constraints.gridx = 2;
 		constraints.gridy = 0;
 		constraints.gridwidth = GridBagConstraints.RELATIVE;
 		constraints.gridheight = 1;
 		//constraints.fill = GridBagConstraints.HORIZONTAL;
-		adjacent.addActionListener(new ActionListener() {
+		triad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				isPastel();
 			}
 		});
 		add(triad, constraints);
+
+		//panel.setVisible(true);
+		//constraints.gridx(1);
+		//onstraints.gridy(1);
+
 
 
 		JButton compColor = new JButton("Complementary Color");
@@ -156,7 +170,7 @@ public class Palette extends JFrame {
 				}
 			}
 		});
-		add(compColor);
+		add(compColor, constraints);
 	}
 	
 	
@@ -187,7 +201,7 @@ public class Palette extends JFrame {
 				break;
 				
 			case JOptionPane.NO_OPTION:
-				JOptionPane.showMessageDialog(frame, "An equal number of tints and shades will" +
+				JOptionPane.showMessageDialog(frame, "An equal number of tints and shades will " +
 						"be made.");
 				pastel = false;
 				break;
@@ -269,10 +283,20 @@ public class Palette extends JFrame {
 
 					testing = parseInt(customNumber);
 
-					JOptionPane.showMessageDialog(frame, "Generating swatch with " + testing +
-							" colors.");
+                    if(testing > 20)
+                    {
+                        JOptionPane.showMessageDialog(frame, "Too many colors.");
+                        colors = 0;
+                    }
+                    else {
 
-					colors = testing;
+                        JOptionPane.showMessageDialog(frame, "Generating swatch with " + testing +
+                                " colors. UNAVAILABLE, DEFAULTS TO 3");
+
+
+                        //colors = testing;
+                        colors = 3;
+                    }
 				}
 				catch (NumberFormatException nfe){
 					JOptionPane.showMessageDialog(frame, "This is not a number value." +
@@ -287,9 +311,7 @@ public class Palette extends JFrame {
 				//colors = 3;
 				break;
 			default:
-				JOptionPane.showMessageDialog(frame, "Defaulting to swatch with 4 " +
-						"colors.");
-				colors = 4;
+				colors = 0;
 				break;
 		}
 
