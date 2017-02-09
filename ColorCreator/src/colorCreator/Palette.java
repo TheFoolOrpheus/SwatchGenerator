@@ -53,6 +53,9 @@ public class Palette extends JFrame {
 		/*
 		 * Creating the frame, which I might have to make non-resizable.
 		 * The layout is GridBag.
+		 *
+		 * I need to add a menubar with a bar that offers help so that people don't get confused by
+		 * what some of these buttons do.
 		 */
 		setTitle("Swatch Creator");
 		//Prev. size 1000 x 1000

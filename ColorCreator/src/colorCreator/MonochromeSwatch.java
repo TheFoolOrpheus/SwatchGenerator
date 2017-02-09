@@ -11,10 +11,20 @@ public class MonochromeSwatch implements Swatch {
     Color baseColor;
     Color colors[];
 
+    /**
+     * Default constructor, unsued for now. Not sure if I need it?
+     */
     public MonochromeSwatch(){
 
     }
 
+    /**
+     * This is the constructor I intend to use for the most part, takes in the number of
+     * colors, whether or not the colors should be complementary, and eventually whether or not
+     * the palette will be pastel.
+     * @param numColors the number of colors the user wants.
+     * @param complementary whether or not the swatch is made of complimentary colors
+     */
     public MonochromeSwatch(int numColors, boolean complementary){
 
 
@@ -31,6 +41,7 @@ public class MonochromeSwatch implements Swatch {
 
         //A message dialog here, or whatever, I'll get to it later. The choice will be stored in int choice.
         int choice = 1;
+        boolean odd = isOdd(numColors);
 
         if(choice == JOptionPane.YES_OPTION){
 
@@ -39,6 +50,21 @@ public class MonochromeSwatch implements Swatch {
              */
 
             //not sure what kind of dialog here
+            if(complementary == true)
+            {
+                complementaryColors(baseColor);
+            }
+            else if(complementary == false){
+                createColors(baseColor);
+
+                if(odd == true){
+                    divisionOfColors();
+                }
+                else{
+                    colors = createColors(baseColor);
+                }
+            }
+
 
         }
         else if(choice == JOptionPane.NO_OPTION){
@@ -51,15 +77,9 @@ public class MonochromeSwatch implements Swatch {
         }
 
 
-        if(complementary == true)
-        {
-            complementaryColors(baseColor);
-        }
-        else if(complementary == false){
-            createColors(baseColor);
-        }
 
-        boolean odd = isOdd(numColors);
+
+
 
 
     }
@@ -70,6 +90,18 @@ public class MonochromeSwatch implements Swatch {
          * Asks the user if they want more tints or more shades.
          * After wards, begins processing the colors.
          * Uses the abstract method in swatch, create colors.
+         * Actually, I'm going to make a seperate method called
+         * odd create colors. This method will take in two ints,
+         * even and odd, plus a boolean, moreTint. If true, then
+         * check which number is larger and use that to create tints.
+         * If false, check which number is larger and use that to
+         * create shades.
+         */
+
+        /*
+         * So the user is asked "do you want more tints or more shades"
+         * in this method, and then is handed off to the oddCreateColors
+         * method.
          */
 
         return new Color[0];
@@ -77,10 +109,22 @@ public class MonochromeSwatch implements Swatch {
 
     /**
      * The method that computes the colors being created.
+     * @param color the base color
      * @return an array of colors
      */
     public Color[] createColors(Color color){
 
+
+        return new Color[0];
+    }
+
+    /**
+     * A method that computes colors being created when the number of colors that will be
+     * generated is odd.
+     * @param color the base color
+     * @return an array of colors
+     */
+    private Color[] oddCreateColors(Color color){
 
         return new Color[0];
     }
@@ -137,6 +181,26 @@ public class MonochromeSwatch implements Swatch {
     }
 
     public Color complementaryColors(Color color){
+
+        /*
+         * Steps:
+         * - Take Hue
+         * - Subtract 180 or add 180 (the number needs to be between 0 and 360)
+         * - Create new color
+         *
+         * OK, so...hue is expressed in degrees, yeah? Red's hue is 0, and cyan is 180.
+         * Green is 120. Blue is 240. Yellow is 60. Magenta is 300. OK, and obv. red is
+         * also 360, but I assume they just go with 0.
+         *
+         * Unfortunately, Color.java doesn't have a getHSV/HSB/HSL method. That means I
+         * have to get those myself via math. So in swatch I'm going to create a default
+         * method that gets these values but the values themselves are float values. I should
+         * consider making this method also a default one? I mean just about every swatch uses
+         * this.
+         *
+         */
+
+        Color complement = new Color();
 
 
         return new Color(0,0,0);

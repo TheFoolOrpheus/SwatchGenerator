@@ -17,6 +17,8 @@ import java.awt.*;
 public interface Swatch {
 
 
+    Color[] colors;
+    Color baseColor;
     /**
      *
      * When given a color, finds the hexadecimal associated with it.
@@ -168,10 +170,222 @@ public interface Swatch {
     }
 
     /**
+     *
+     * @param color
+     * @return HSV, a float array with the following values in order: Hue, Saturation HSV, Saturation HSI,
+     * Saturation HSL, Intensity, and Lightness
+     */
+    default float[] getHSV(Color color){
+
+
+        float HSV[6];
+
+        /*
+         *
+         * I'm more or less using this: http://www.camick.com/java/source/HSLColor.java
+         * but this is subject to change if it's not working the way
+         * I want it to.
+         *
+         * OK, so apparently you need to get RGB values  in the range of 0 -1.
+         * I don't know how you do that via code, but apparently
+         * getRGBColorComponents does that.
+         *
+         */
+
+        float components[] = color.getRGBColorComponents(null);
+        float r = components[0];
+        float g = components[1];
+        float b = components[2];
+
+        /*
+         * HSL uses the largest and smallest RGB values, apparently.
+         * I need to look into that. According to wikipedia it's vector
+         * math, ugh. see here: https://en.wikipedia.org/wiki/HSL_and_HSV#Color-making_attributes
+         *
+         * So wikipedia claims that hue and chroma are related. Hue is the
+         * angle of the vector to a point in the projection (red being 0 degrees)
+         * and chroma is the distance from the point from the origin. So, because
+         * of this, M or max = the maximum value between r g and b, and m or min
+         * = the minimum value between r g and b. And then C, chroma, is M - m,
+         * which means any color that has r = g = b= has 0 chroma. Thus the colors
+         * (r,g,b) and (r-m,g-m,b-m) project on the same point, and have the same
+         * chroma.
+         *
+         * ATM I don't care about chroma. Also it seems like there's no way to figure
+         * out the hue from the chroma. For the moment, this is just the way to get the
+         * min and max values.
+         */
+
+        float min = Math.min(r, Math.min(g,b));
+        float max = Math.max(r, Math.max(g,b));
+
+        /*
+         * OK SO. This is where things are getting a bit crazy, yeah? So right now, I'm
+         * using an r,g,b that are on a scale from 0 to 1. But there is a way to do this
+         * with degrees. I just don't know how useful it is, but I think it might be helpful
+         * to understand. Now, the thing is that H or hue = 60 degrees times the derivative of
+         * H. The derivative of H is a piecewise equation. So like I said before, chroma
+         * and hue more or less don't seem to have any relation outside of their definintions
+         * so as it turns out, if C = 0, H' is undefined.
+         *
+         * If M = r, so when r is the largest value in the color,((g-b)/c))%6 is the equation
+         * used. I want to test this, so... let's use the color red, ff0000 as an example for this
+         * Red is composed of 100% red, 0% green, and 0% blue. M, in this case, would be 100,
+         * and m would be 0, so c = M - m = 100 - 0 = 100. Thus... the equation is ((0-0)/100)%6.
+         * so... then the hue is (0/100)%6. 0%6 is... 0 right? So then H = 60 degrees times 0, which
+         * is 0, so... is the hue of red 0 degrees? Yes, this checks out.
+         *
+         * if M = g, or when g is the largest value in the color, ((B-R)/C)+ 2 is the equation
+         * used. I may test this in a bit.
+         *
+         * Finally, if M = b, or b is the largest value in the color, ((R-G)/C)+ 4 is the equation
+         * used. Again, may test later.
+         *
+         * Again this is for use SPECIFICALLY with percentages. And tbh, this is way easier for me
+         * to understand than the stuff in the code before, like I don't like vector math,
+         * but I understand it.
+         *
+         * Now the issue is that when you have a value between 0 and 1, technically isn't that a percentage?
+         * I guess, yes.. the percentage is only if the number is in the form 0.xx, where xx are real numbers
+         * and so IN THAT REGARD, if I could truncate the values... couldn't I use... this kind of thing?
+         *
+         * Because otherwise I have to use the code on the website, which states...
+         *
+         * if M = m, H = 0. So, if r = 0, g = 0, and b = 0, the hue itself is 0. That holds up.
+         * black has a hue of 0. I think that's the monochrome black to white color scheme... all the grays
+         * seem to be hue 0. So I'll say yes, that holds up.
+         *
+         * if M = r, then... Well, the muliplcation by 60 part of these, I understand
+         * that as just being the way you find the hue from the derivative of hue, so disregarding that,
+         * it seems like the equations used are the same as the other one? OK, so... I guess they ARE using
+         * percentages? The website that directed me to this code wasn't very clear. Mmk, so I
+         * understand this but there are some fundamental differences between the two.
+         *
+         * So previously, when M = r we used ((g-b)/c))%6. But in this case, without using chroma,
+         * if M = r, then we say (960 * (g-b)/ (max - min)) + 360) % 360.
+         *
+         * Like... OK, but why not just create chroma then? Like doesn't that make the most sense?
+         *
+         * I think I'll just create a chroma and go with that.
+         *
+         */
+
+        float chroma = max - min;
+
+        float hue = 0;
+        float dHue = 0;
+
+        if(max == min){
+            hue = 0;
+        }
+        else if (max == r){
+            dHue = ((g - b)/ chroma)%6;
+            hue = 60 * dHue;
+        }
+        else if(max == g){
+            dHue = ((b - r)/ chroma) + 2;
+            hue = 60 * dHue;
+        }
+        else if (max == b){
+            dHue = ((r - g)/ chroma) + 4;
+            hue = 60 * dHue;
+        }
+        HSV[0] = hue;
+
+        /*
+         * So, I wrote the comment for saturation first, but I need to do the
+         * stuff for Lightness and Intensity first.  Let's do it!
+         *
+         * So, there's intensity, whichis the average of the rgb components. That's
+         * easy.
+         *
+         * Next we're using lightness, which is the average of the minimum and maximum
+         * values of  the color components. Also easy!
+         *
+         */
+
+        float intensity = (r + g + b)/3;
+        HSV[4] = intensity;
+        float lightness = (max + min)/2;
+        HSV[5] = lightness;
+
+        /*
+         * OK, saturation time.
+         *
+         * The code in the link doesn't explain WHY their stuff works, like
+         * why do we do what we do in that code. So again, I went to wikipedia to
+         * determine what the reasoning behind determining saturation from rgb
+         * values is.
+         *
+         * So according to Wikipedia, V, or value, is the same as the largest component
+         * so they use V to mean M. I'm gonna ignore that for now, like... it doesn't
+         * matter since I already have M.
+         *
+         * Essentially then... S, or saturation, in th HSV model, is 0 if V = 0, and
+         * otherwise, is C/V.
+         *
+         * HOWEVER, in HSL, S depends on L, or lightness. If L = 1, then S = 0, otherwise
+         * S = C/(1 - |2L -1|).
+         *
+         * AND in the HSI method, it's dependent on I or intensity, where if I = 0, S = 0, else
+         * S = 1 - (m/I).
+         *
+         * I chose HSV as the method name for this... but which of these would I use if
+         * I wanted to make something useful for pixel artists? I guess I'm going to have to
+         * research that a bit more...
+         *
+         * Ugh, for now, I think I'll calculate all of the values. It might be helpful,
+         * when I'm printing out data to have these values... we'll just stick with that story,
+         * and not that I have no idea what I'm doing. ._. Yeah, that's it.
+         *
+         */
+
+        float saturationV = 0;
+        if(max == 0){
+            saturationV = 0;
+        }
+        else{
+            saturationV = chroma/ max;
+        }
+        HSV[1] = saturationV;
+
+        float saturationI = 0;
+        if(intensity == 0){
+            saturationI = 0;
+        }
+        else{
+            saturationI = 1 - (min/intensity);
+        }
+        HSV[2] = saturationI;
+
+        float saturationL = 0;
+        if(lightness == 1){
+            saturationL = 0;
+        }
+        else{
+            float light = 2(lightness) - 1;
+            saturationL = chroma/(1 - Math.abs(light));
+        }
+        HSV[3] = saturationL;
+
+
+        return HSV[];
+    }
+
+    /**
      * The method that computes the colors being created.
+     * @param color the base color
      * @return an array of colors
      */
     Color[] createColors(Color color);
+
+    /**
+     * A method that computes colors being created when the number of colors that will be
+     * generated is odd.
+     * @param color the base color
+     * @return an array of colors
+     */
+    Color[] oddCreateColors(Color color);
 
     /**
      * Allows the user to determine the percentage of white to add to the colors in question.
