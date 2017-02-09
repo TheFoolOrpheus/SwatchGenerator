@@ -81,8 +81,13 @@ public class Creator extends JFrame {
 					    		" to get used to writing GUIs again.\nI hope it's useful to you, if you" +
 					    		" actually downloaded it! (Thanks for that!)\nI don't plan on making many" +
 					    		" updates unless it's of particular use to anyone, so if you would like more\n" +
+<<<<<<< HEAD
 					    		"please let me know. As far as I can tell, there will probably be about " +
 								"three total updates spread out over\na few months. I am pretty aware that this" +
+=======
+					    		" please let me know. As far as I can tell, there will probably be about " +
+								"three total updates spread out over\n a few months. I am pretty aware that this" +
+>>>>>>> origin/Development
 								" isn't the world's best swatch generator, so criticism is necessary! \nThanks! -404");
 				
 				
@@ -109,11 +114,19 @@ public class Creator extends JFrame {
 				" so I am not well versed in that kind of thing.\n\nQ: Can I see your code?\nA: Yeah," +
 				" if it interests you, my code is stored on GitHub. You can view the repository for" +
 				" this project here:\nhttps://github.com/TheFoolOrpheus/SwatchGenerator\n\nQ: Will you " +
+<<<<<<< HEAD
 				"be making anything else?\nA: Yes. But most of what I do isn't stuff that people can play with" +
 				" normally, so I wouldn't get too excited about it. \n\nQ: Can I help?\nA: Like you want to work on"  +
 				" this project? I don't care, it's basically open source if it's on GitHub. Personally I'm not\n" +
 				"looking for help with this project so I'm not asking for help. But you can branch off my project" +
 				" since it isn't private.\n\nQ: Do you have a Patreon/PayPal/Venmo/Other payment method?\nA: I do, but I don't " +
+=======
+				" be making anything else?\nA: Yes. But most of what I do isn't stuff that people can play with" +
+				" normally, so I wouldn't get too excited about it. \n\nQ: Can I help?\nA: Like you want to work on"  +
+				" this project? I don't care, it's basically open source if it's on GitHub. Personally I'm not\n" +
+				"looking for help with this project so I'm not asking for help. But you can branch off my project" +
+				"since it isn't private.\n\nQ: Do you have a Patreon/PayPal/Venmo/Other payment method?\nA: I do, but I don't " +
+>>>>>>> origin/Development
 				"really expect to be paid for this, it's more of a gift to Pixilart that happened to coincide " +
 				"with a\ndifferent project I was working on.");
 			}

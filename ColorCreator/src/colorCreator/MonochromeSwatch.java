@@ -200,7 +200,11 @@ public class MonochromeSwatch implements Swatch {
          *
          */
 
+<<<<<<< HEAD
         Color complement = new Color(0, 0, 0);
+=======
+        Color complement = new Color(0,0,0);
+>>>>>>> origin/Development
 
 
         return complement;
