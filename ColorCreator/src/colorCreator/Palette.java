@@ -6,10 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-<<<<<<< HEAD
 import java.awt.Insets;
-=======
->>>>>>> origin/Development
+
 
 import static java.lang.Integer.parseInt;
 
@@ -40,7 +38,6 @@ public class Palette extends JFrame {
 	private void paletteWindow(){
 		
 		/*
-<<<<<<< HEAD
          * OMG GRIDBAG SOLVED
          * IT WAS THE WEIGHT
          * THANK YOU http://www.java2s.com/Code/Java/Swing-JFC/GridBagLayoutPane.htm
@@ -56,21 +53,13 @@ public class Palette extends JFrame {
 		
 		
 		
-=======
+		/*
 		 * Not sure why, I need to read up on GridBagLayout to
 		 * see what the purpose of doing this kind of thing is.
 		 */
 		boolean shouldFill = true;
 		boolean shouldWeightX = true;
-
-        /*
-         * Testing some GridBag stuff
-         */
-		GridBagLayout gridBag = new GridBagLayout();
-		GridBagLayout colorPaneLayout = new GridBagLayout();
-		JPanel panel = new JPanel();
->>>>>>> origin/Development
-		
+	
 		/*
 		 * Creating the frame, which I might have to make non-resizable.
 		 * The layout is GridBag.
@@ -80,27 +69,13 @@ public class Palette extends JFrame {
 		 */
 		setTitle("Swatch Creator");
 		//Prev. size 1000 x 1000
-<<<<<<< HEAD
 		setSize(525,525);
-=======
-		setSize(500,500);
->>>>>>> origin/Development
 		setLocationRelativeTo(null);
 		setAlwaysOnTop(true);
 		setVisible(true);
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		setResizable(false);
 		setLayout(gridBag);
-<<<<<<< HEAD
-		
-=======
-		gridBag.layoutContainer(this);
-		GridBagConstraints constraints = new GridBagConstraints();
-		setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		if(shouldFill){
-			constraints.fill = GridBagConstraints.HORIZONTAL;
-		}
->>>>>>> origin/Development
 
 		/*
 		 * The frame used for dialog boxes when buttons are being pressed.
@@ -109,7 +84,7 @@ public class Palette extends JFrame {
 		frame.setAlwaysOnTop(true);
 		frame.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
-<<<<<<< HEAD
+
 		
 		c.gridx = 3;
 	    c.gridy = 0;
@@ -133,10 +108,10 @@ public class Palette extends JFrame {
 	    c.weightx = c.weighty = 1.0;
 	    add(panel, c);
 	    
-=======
+
 
 				
->>>>>>> origin/Development
+
 		/*
 		 * Creating the monochrome button. Should pass isPastel and
 		 * paletteNumber to the monochrome class.
@@ -144,7 +119,7 @@ public class Palette extends JFrame {
 		 */
 		JButton monochrome = new JButton("Monochrome");
 		monochrome.setActionCommand("Monochrome");
-<<<<<<< HEAD
+
 		c.gridx = 0;
 	    c.gridy = 0;
 	    c.gridwidth = 1;
@@ -160,58 +135,27 @@ public class Palette extends JFrame {
 			}
 		});
         add(monochrome, c);
-		//add(monochrome);
-=======
-		if(shouldWeightX){
-			constraints.weightx = 0.5;
-		}
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.gridwidth = 1;
-		constraints.gridheight = 1;
-		constraints.fill = GridBagConstraints.BOTH;
-		monochrome.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e){
-				MonochromeSwatch ms = new MonochromeSwatch(paletteNumber(), complementary);
-
-			}
-		});
-        add(monochrome, constraints);
->>>>>>> origin/Development
 		
-		/*
+        
+        /*
 		 * Creating a adjacent color button. Should pass isPastel and
 		 *  paletteNumber to the adjacent class.
 		 */
 		JButton adjacent = new JButton("Adjacent");
 		adjacent.setActionCommand("Adjacent");
-<<<<<<< HEAD
+
 		c.gridx = 1;
 	    c.gridy = 0;
 	    c.gridwidth = 1;
 	    c.gridheight = 1;
 	    c.weightx = c.weighty = 0.0;
-=======
-		if(shouldWeightX){
-			constraints.weightx = 0.5;
-		}
-		constraints.gridx = 1;
-		constraints.gridy = 0;
-		constraints.gridwidth = GridBagConstraints.RELATIVE;
-		constraints.gridheight = 1;
-		//constraints.fill = GridBagConstraints.HORIZONTAL;
->>>>>>> origin/Development
 		adjacent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				isPastel();
 			}
 		});
-<<<<<<< HEAD
+
 		add(adjacent, c);
-		//add(adjacent);
-=======
-		add(adjacent, constraints);
->>>>>>> origin/Development
 
 
 		/*
@@ -220,33 +164,19 @@ public class Palette extends JFrame {
 		 */
 		JButton triad = new JButton("Triad");
 		triad.setActionCommand("Triad");
-<<<<<<< HEAD
 		c.gridx = 2;
 	    c.gridy = 0;
 	    c.gridwidth = 1;
 	    c.gridheight = 1;
 	    c.weightx = c.weighty = 0.0;
-=======
-		if(shouldWeightX){
-			constraints.weightx = 0.5;
-		}
-		constraints.gridx = 2;
-		constraints.gridy = 0;
-		constraints.gridwidth = GridBagConstraints.RELATIVE;
-		constraints.gridheight = 1;
-		//constraints.fill = GridBagConstraints.HORIZONTAL;
->>>>>>> origin/Development
 		triad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				isPastel();
 			}
 		});
-<<<<<<< HEAD
+
 		add(triad, c);
 		
-
-
-
 		/*
 		 * Creating the complementary colors button. Should go across the bottom
 		 * entirely but... I mean of course it isn't, I suck at gridBag.
@@ -257,24 +187,6 @@ public class Palette extends JFrame {
 	    c.gridy = 5;
 	    c.gridwidth = 5;
 	    c.gridheight = 1;
-=======
-		add(triad, constraints);
-
-		//panel.setVisible(true);
-		//constraints.gridx(1);
-		//onstraints.gridy(1);
-
-
-
-		JButton compColor = new JButton("Complementary Color");
-		compColor.setActionCommand("Complementary Color");
-		if(shouldWeightX){
-			constraints.weightx = 0.5;
-		}
-		constraints.gridx = 0;
-		constraints.gridy = 2;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
->>>>>>> origin/Development
 		compColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				complementaryOn();
@@ -286,12 +198,10 @@ public class Palette extends JFrame {
 				}
 			}
 		});
-<<<<<<< HEAD
+
 		add(compColor, c);
 		
-=======
-		add(compColor, constraints);
->>>>>>> origin/Development
+
 	}
 	
 	

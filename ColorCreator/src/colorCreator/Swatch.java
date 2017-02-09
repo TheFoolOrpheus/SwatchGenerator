@@ -363,11 +363,9 @@ public interface Swatch {
             saturationL = 0;
         }
         else{
-<<<<<<< HEAD
+
             float light = 2 * (lightness) - 1;
-=======
-            float light = 2*(lightness) - 1;
->>>>>>> origin/Development
+
             saturationL = chroma/(1 - Math.abs(light));
         }
         HSV[3] = saturationL;
