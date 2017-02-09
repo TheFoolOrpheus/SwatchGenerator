@@ -17,8 +17,8 @@ import java.awt.*;
 public interface Swatch {
 
 
-    Color[] colors;
-    Color baseColor;
+    Color[] colors = null;
+    Color baseColor = new Color(0,0,0);
     /**
      *
      * When given a color, finds the hexadecimal associated with it.
@@ -178,7 +178,7 @@ public interface Swatch {
     default float[] getHSV(Color color){
 
 
-        float HSV[6];
+        float HSV[] = new float[6];
 
         /*
          *
@@ -363,13 +363,13 @@ public interface Swatch {
             saturationL = 0;
         }
         else{
-            float light = 2(lightness) - 1;
+            float light = 2*(lightness) - 1;
             saturationL = chroma/(1 - Math.abs(light));
         }
         HSV[3] = saturationL;
 
 
-        return HSV[];
+        return HSV;
     }
 
     /**

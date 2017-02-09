@@ -124,7 +124,7 @@ public class MonochromeSwatch implements Swatch {
      * @param color the base color
      * @return an array of colors
      */
-    private Color[] oddCreateColors(Color color){
+    public Color[] oddCreateColors(Color color){
 
         return new Color[0];
     }
@@ -200,10 +200,10 @@ public class MonochromeSwatch implements Swatch {
          *
          */
 
-        Color complement = new Color();
+        Color complement = new Color(0,0,0);
 
 
-        return new Color(0,0,0);
+        return complement;
     }
 
 
