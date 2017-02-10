@@ -5,6 +5,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+
 import javax.swing.*;
 import java.awt.Insets;
 
@@ -37,6 +39,9 @@ public class Palette extends JFrame {
 	
 	private void paletteWindow(){
 		
+		
+		createMenuBar();
+		
 		/*
          * OMG GRIDBAG SOLVED
          * IT WAS THE WEIGHT
@@ -49,17 +54,7 @@ public class Palette extends JFrame {
 		c.fill = GridBagConstraints.BOTH;
 		// this gives a 2 -pixel margin on all sides
 		c.insets = new Insets(2,2,2,2);
-		
-		
-		
-		
-		/*
-		 * Not sure why, I need to read up on GridBagLayout to
-		 * see what the purpose of doing this kind of thing is.
-		 */
-		boolean shouldFill = true;
-		boolean shouldWeightX = true;
-	
+			
 		/*
 		 * Creating the frame, which I might have to make non-resizable.
 		 * The layout is GridBag.
@@ -69,7 +64,7 @@ public class Palette extends JFrame {
 		 */
 		setTitle("Swatch Creator");
 		//Prev. size 1000 x 1000
-		setSize(525,525);
+		setSize(575,600);
 		setLocationRelativeTo(null);
 		setAlwaysOnTop(true);
 		setVisible(true);
@@ -86,19 +81,35 @@ public class Palette extends JFrame {
 		frame.setLocationRelativeTo(null);
 
 		
+		
+		JButton multi = new JButton("Multi-Color");
+		multi.setActionCommand("Multi-Color");
 		c.gridx = 3;
 	    c.gridy = 0;
 	    c.gridwidth = 1;
 	    c.gridheight = 1;
 	    c.weightx = c.weighty = 0.0;
-	    this.add(new JButton("PlaceHolder 1"), c);
+		multi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				
+			}
+		});
+	    this.add(multi, c);
 		
+	    
+	    JButton shift = new JButton("Hue Shift Ramp");
+		shift.setActionCommand("Hue Shift Ramp");
+		shift.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				
+			}
+		});
 		c.gridx = 4;
 	    c.gridy = 0;
 	    c.gridwidth = 1;
 	    c.gridheight = 1;
 	    c.weightx = c.weighty = 0.0;
-	    this.add(new JButton("PlaceHolder 2"), c);
+	    this.add(shift, c);
 
 	    JColorChooser panel = new JColorChooser();
 	    c.gridx = 0;
@@ -108,10 +119,6 @@ public class Palette extends JFrame {
 	    c.weightx = c.weighty = 1.0;
 	    add(panel, c);
 	    
-
-
-				
-
 		/*
 		 * Creating the monochrome button. Should pass isPastel and
 		 * paletteNumber to the monochrome class.
@@ -132,6 +139,7 @@ public class Palette extends JFrame {
 				 * OK, I need this to draw onto a panel but for now I'm just going to print out
 				 * the color names and shiiiiiii-
 				 */
+				
 			}
 		});
         add(monochrome, c);
@@ -164,6 +172,7 @@ public class Palette extends JFrame {
 		 */
 		JButton triad = new JButton("Triad");
 		triad.setActionCommand("Triad");
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
 	    c.gridy = 0;
 	    c.gridwidth = 1;
@@ -204,6 +213,36 @@ public class Palette extends JFrame {
 
 	}
 	
+	public void createMenuBar(){
+		
+		JMenuBar menuBar = new JMenuBar();
+				
+		JMenuItem how = new JMenuItem("How To Use This Program");
+		how.setMnemonic(KeyEvent.VK_H);
+		how.setToolTipText("How To");
+		how.addActionListener(
+				(ActionEvent event) -> {
+					JFrame f = new JFrame("How To");
+					f.setDefaultCloseOperation(HIDE_ON_CLOSE);
+					f.setVisible(true);
+					f.setSize(200, 200);
+					f.setLocationRelativeTo(null);
+					f.setAlwaysOnTop(true);
+					JSplitPane howTo = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+					f.add(howTo);
+				}
+				
+				);
+		
+		//Adding menus to menu bar
+		menuBar.add(how);
+		
+		
+		//Setting menu bar
+		setJMenuBar(menuBar);
+	
+	}
+	
 	
 	/**
 	 * 
@@ -219,7 +258,7 @@ public class Palette extends JFrame {
 		frame.setLocationRelativeTo(null);
 		frame.setAlwaysOnTop(true);
 		boolean pastel = false;
-		
+				
 		int n = JOptionPane.showConfirmDialog(frame, "Are you creating a pastel palette?",
 				"Pastel?", JOptionPane.YES_NO_CANCEL_OPTION);
 		
@@ -246,6 +285,7 @@ public class Palette extends JFrame {
 				break;
 		
 		}
+		
 		
 		return pastel;
 	}

@@ -14,8 +14,8 @@ public class MonochromeSwatch implements Swatch {
     /**
      * Default constructor, unsued for now. Not sure if I need it?
      */
-    public MonochromeSwatch(){
-
+    public MonochromeSwatch(boolean complementary){
+    	complementaryColors(baseColor);
     }
 
     /**
@@ -25,7 +25,7 @@ public class MonochromeSwatch implements Swatch {
      * @param numColors the number of colors the user wants.
      * @param complementary whether or not the swatch is made of complimentary colors
      */
-    public MonochromeSwatch(int numColors, boolean complementary){
+    public MonochromeSwatch(int numColors, boolean pastel){
 
 
         /*
@@ -40,147 +40,67 @@ public class MonochromeSwatch implements Swatch {
          */
 
         //A message dialog here, or whatever, I'll get to it later. The choice will be stored in int choice.
-        int choice = 1;
         boolean odd = isOdd(numColors);
-
-        if(choice == JOptionPane.YES_OPTION){
+        float factor = 0;
+        JFrame frame = new JFrame();
+        frame.setLocationRelativeTo(null);
+        frame.setAlwaysOnTop(true);
 
             /*
              * Give the user a choice of entering a hexcode or a RGB value.
              */
+        	int opt = 0;
+            String options[] = {"Yes", "No"};
+            opt = JOptionPane.showOptionDialog(frame, "Do you have a color in mind as your base color?", "Base color",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            
+            switch(opt){
+            
+            	case 0:       		
+            		baseColor = chooseColor();
+            		break;
+            	case 1:
+            		baseColor = randomColorChooser();
+            		break;
+        		default:
+        			baseColor = randomColorChooser();
+        			break;
+            
+            }
+            
+            JOptionPane.showMessageDialog(frame, "Your base color is " + decimaltoHex(baseColor.getRed(),
+            		baseColor.getGreen(), baseColor.getBlue()));
 
             //not sure what kind of dialog here
-            if(complementary == true)
+            if(pastel == true)
             {
-                complementaryColors(baseColor);
+            	JOptionPane.showMessageDialog(frame, "Running pastelColors." + "\nBase Color: " + decimaltoHex(baseColor.getRed(),
+                		baseColor.getGreen(), baseColor.getBlue()));
+                pastelColors(baseColor);
             }
-            else if(complementary == false){
-                createColors(baseColor);
-
+            else if(pastel == false){
+            	
+            	JOptionPane.showMessageDialog(frame, "Getting factor.");
+            	factor = getFactor();
+            	
+            	//createColors(baseColor, numColors, factor);
+            	JOptionPane.showMessageDialog(frame, "Checking to see if odd");
                 if(odd == true){
-                    divisionOfColors();
+                    colors = divisionOfColors(numColors, baseColor, factor);
                 }
                 else{
-                    colors = createColors(baseColor);
+                    colors = createColors(baseColor, numColors, factor);
                 }
             }
-
-
-        }
-        else if(choice == JOptionPane.NO_OPTION){
-
-            randomColorChooser();
-
-        }
-        else{
-            //Not sure what to do if they cancel out... just exit?
-        }
-
-
-
-
-
+            
+            JOptionPane.showMessageDialog(frame, toString());
 
 
     }
 
-    public Color[] divisionOfColors(){
-
-        /*
-         * Asks the user if they want more tints or more shades.
-         * After wards, begins processing the colors.
-         * Uses the abstract method in swatch, create colors.
-         * Actually, I'm going to make a seperate method called
-         * odd create colors. This method will take in two ints,
-         * even and odd, plus a boolean, moreTint. If true, then
-         * check which number is larger and use that to create tints.
-         * If false, check which number is larger and use that to
-         * create shades.
-         */
-
-        /*
-         * So the user is asked "do you want more tints or more shades"
-         * in this method, and then is handed off to the oddCreateColors
-         * method.
-         */
-
-        return new Color[0];
-    }
-
-    /**
-     * The method that computes the colors being created.
-     * @param color the base color
-     * @return an array of colors
-     */
-    public Color[] createColors(Color color){
-
-
-        return new Color[0];
-    }
-
-    /**
-     * A method that computes colors being created when the number of colors that will be
-     * generated is odd.
-     * @param color the base color
-     * @return an array of colors
-     */
-    public Color[] oddCreateColors(Color color){
-
-        return new Color[0];
-    }
-
-    /**
-     * Allows the user to determine the percentage of white to add to the colors in question.
-     * Uses a float because decimal places... might switch to a double, I don't need repeating
-     * numbers all over the place.
-     * @param factor the fraction value of white being added to the color
-     * @param color the base color
-     * @return a lighter color.
-     */
-    public Color brightenBy(Color color, float factor){
-
-        /*
-         * Steps:
-         * 255 - previous value
-         * multiply by factor
-         * add to previous value
-         */
-
-        double r = (255 - (double)color.getRed()) * (factor);
-        double g = (255 - (double)color.getGreen()) * (factor);
-        double b = (255 - (double)color.getBlue()) * (factor);
-
-        Color newTint = new Color((float)r + color.getRed(), (float)g + color.getGreen(), (float)b + color.getBlue());
-
-        return newTint;
-    }
-
-    /**
-     * Allows the user to determine the percentage of black to add to the colors in question.
-     * Uses a float because decimal places... might switch to a double, I don't need repeating
-     * numbers all over the place.
-     * @param factor the percentage of black being added to the color
-     * @param color the base color
-     * @return a darker color.
-     */
-    public Color darkenBy(Color color, float factor){
-
-        /*
-         * Steps:
-         * multiply by factor
-         *
-         */
-
-        double r = (double)color.getRed() * (1/factor);
-        double g = (double)color.getGreen() * (1/factor);
-        double b = (double)color.getBlue() * (1/factor);
-
-        Color newShade =  new Color((float)r, (float)g, (float) b);
-
-        return newShade;
-    }
-
-    public Color complementaryColors(Color color){
+    
+    @SuppressWarnings("static-access")
+	public Color complementaryColors(Color color){
 
         /*
          * Steps:
@@ -199,12 +119,48 @@ public class MonochromeSwatch implements Swatch {
          * this.
          *
          */
+    	
+    	float[] HSV = getHSV(color);
 
         Color complement = new Color(0, 0, 0);
-
-
+        
+        int rgbInt = 0;
+        float newHue = HSV[0] - 180;
+        
+        if((newHue) < 360 && (newHue) > 0){
+        	
+        	rgbInt = complement.HSBtoRGB(newHue, HSV[3], HSV[5]);
+        	complement = new Color(rgbInt);
+        }
+        else{
+        	
+        	newHue = HSV[0] + 180;
+        	rgbInt = complement.HSBtoRGB(newHue, HSV[3], HSV[5]);
+        	complement = new Color(rgbInt);
+        	
+        }
 
         return complement;
+    }
+    
+    public Color pastelColors(Color color){
+    	
+    	return new Color(0,0,0);
+    }
+    
+    public String toString(){
+    	
+    	String information = "Colors: ";
+    	
+    	for(int i = 0; i < colors.length; i++)
+    	{
+    		information = information + " " + colorToHex(colors[i]) + " ";
+    	}
+    	
+    	information = information + "\nBase Color: " + colorToHex(baseColor);
+    	
+    	
+    	return information;
     }
 
 

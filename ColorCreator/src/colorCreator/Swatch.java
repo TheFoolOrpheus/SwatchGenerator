@@ -120,10 +120,19 @@ public interface Swatch {
      */
     default Color chooseColor(){
 
+    	JFrame frame = new JFrame();
+    	frame.setDefaultCloseOperation(frame.HIDE_ON_CLOSE);
+    	frame.setLocationRelativeTo(null);
+    	frame.setAlwaysOnTop(true);
         int opt = 0;
         String options[] = {"RGB", "Hexcode"};
-        opt = JOptionPane.showOptionDialog(null, "Choose a method for entry.", "Base color",
+        opt = JOptionPane.showOptionDialog(frame, "Choose a method for entry.", "Base color",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        
+        /*
+         * This probably works and all, but... I think I can use JColorChooser for RGB. There's no way to use it for
+         * hex, though.
+         */
 
         switch(opt) {
             case 0:
@@ -132,7 +141,7 @@ public interface Swatch {
                  * well, but for right now let's just stick with this particular implementation.
                  */
                 String RGBval;
-                RGBval = JOptionPane.showInputDialog(null, "Enter the RGB value of your" +
+                RGBval = JOptionPane.showInputDialog(frame, "Enter the RGB value of your" +
                                 " color.\nSeparate the values with a \",\" and do not use spaces, like so:\n 10,10,10",
                         "Hexcode", JOptionPane.PLAIN_MESSAGE);
                 String RGB[] = RGBval.split(",");
@@ -148,7 +157,7 @@ public interface Swatch {
                 break;
             case 1:
                 String hexcode;
-                hexcode = JOptionPane.showInputDialog(null, "Enter the hexcode value of your" +
+                hexcode = JOptionPane.showInputDialog(frame, "Enter the hexcode value of your" +
                         " color.", "Hexcode", JOptionPane.PLAIN_MESSAGE);
 
                 int[] RGBint = new int[0];
@@ -163,10 +172,81 @@ public interface Swatch {
 
                 break;
             default:
+            	
+            	String hexcodeDefault;
+                hexcode = JOptionPane.showInputDialog(frame, "Enter the hexcode value of your" +
+                        " color.", "Hexcode", JOptionPane.PLAIN_MESSAGE);
+
+                int[] RGBintDefault = new int[0];
+                try {
+                    RGBintDefault = hexToDecimal(hexcode);
+                    Color color = new Color(RGBintDefault[0], RGBintDefault[1], RGBintDefault[2]);
+                    return color;
+                } catch (Exception e) {
+                    System.err.println("Length of RGBint[]: " + RGBintDefault.length + "\nItems in RGBint[0], RGBint[1], and RGBint[2]:" +
+                            RGBintDefault[0] + " " + RGBintDefault[1] + " " + RGBintDefault[2] + ".");
+                }
 
                 break;
         }
         return null;
+    }
+    
+    default Color[] divisionOfColors(int numColors, Color color, float factor){
+    	
+    	
+    	/*
+         * Asks the user if they want more tints or more shades.
+         * After wards, begins processing the colors.
+         * Uses the abstract method in swatch, create colors.
+         * Actually, I'm going to make a seperate method called
+         * odd create colors. This method will take in two ints,
+         * even and odd, plus a boolean, moreTint. If true, then
+         * check which number is larger and use that to create tints.
+         * If false, check which number is larger and use that to
+         * create shades.
+         */
+
+        /*
+         * So the user is asked "do you want more tints or more shades"
+         * in this method, and then is handed off to the oddCreateColors
+         * method.
+         */
+    	
+    	//First brings up a JOptionPane that asks what the person wants.
+    	JFrame frame = new JFrame();
+    	boolean moreTint = false;
+    	
+    	Object[] options = {"Tints",
+        "Shades"};
+    	
+    	int n = JOptionPane.showOptionDialog(frame,
+    		    "You've chosen an odd number of colors. Would you like more tints or shades?",
+    		    "Tints and Shades",
+    		    JOptionPane.YES_NO_OPTION,
+    		    JOptionPane.QUESTION_MESSAGE,
+    		    null,     //do not use a custom Icon
+    		    options,  //the titles of buttons
+    		    options[0]); //default button title
+    	
+    	//switch around the answer, use boolean MoreTint
+    	switch(n){
+    	
+    		case (JOptionPane.YES_OPTION):
+    			moreTint = true;
+    			break;
+    		case (JOptionPane.NO_OPTION):
+    			moreTint = false;    			
+    			break;
+    		default:
+    			moreTint = false;
+    			break;
+    		    	
+    	}
+    	
+    	//call oddCreateColors
+    	    	
+    	return oddCreateColors(moreTint, color, numColors, factor);
     }
 
     /**
@@ -296,7 +376,7 @@ public interface Swatch {
          * So, I wrote the comment for saturation first, but I need to do the
          * stuff for Lightness and Intensity first.  Let's do it!
          *
-         * So, there's intensity, whichis the average of the rgb components. That's
+         * So, there's intensity, which is the average of the rgb components. That's
          * easy.
          *
          * Next we're using lightness, which is the average of the minimum and maximum
@@ -379,7 +459,37 @@ public interface Swatch {
      * @param color the base color
      * @return an array of colors
      */
-    Color[] createColors(Color color);
+    default Color[] createColors(Color color, int numColors, float factor){
+    	
+    	int half = numColors/2;
+    	int index = half;
+    	Color[] swatch = new Color[numColors];
+    	
+    	for(int i = 0; i < half; i++){
+    		
+    		if(i == 0){
+    			swatch[i] = darkenBy(color, factor);
+    		}
+    		else{
+    			swatch[i] = darkenBy(swatch[i-1], factor);
+    		}
+    		
+    	}
+    	swatch[index] = color;
+    	index++;
+    	for(int i = half + 1; i < numColors; i++){
+    		if(i == half + 1){
+    			swatch[i] = brightenBy(color, factor);
+    		}
+    		else{
+    			swatch[i-1] = brightenBy(swatch[index], factor);
+    		}
+    		index++;
+    	}
+    	
+    	
+    	return new Color[0];
+    }
 
     /**
      * A method that computes colors being created when the number of colors that will be
@@ -387,7 +497,79 @@ public interface Swatch {
      * @param color the base color
      * @return an array of colors
      */
-    Color[] oddCreateColors(Color color);
+    default Color[] oddCreateColors(boolean moreTint, Color color, int numColors, float factor){
+    	
+    	//numColors = 5
+    	int more = (numColors/2) + numColors%2; // 3 tints
+    	int less = numColors/2; // 2 shades
+    	Color[] swatch = new Color[numColors]; // S1 S2 OC T1 T2 T3
+    	int index;
+    	
+    	if(moreTint = true){
+    		index = less;
+    		for(int i = 0; i < less; i++){
+    			
+    			if(i == 0){
+    			
+    				swatch[i] = darkenBy(color, factor);
+    			}
+    			else{
+    				
+    				swatch[i] = darkenBy(swatch[i-1], factor);
+    			}
+    			
+    		}
+    		swatch[index] = color;
+    		index++;
+    		for(int i = 0; i < more; i++){
+    			
+    			if(i == 0){
+    			
+    				swatch[index] = brightenBy(color, factor);
+    				
+    			}
+    			else{
+    				
+    				swatch[index] = brightenBy(swatch[index - 1], factor);
+    				
+    			}
+    			index++;
+    			
+    		}
+    		
+    	}
+    	else{
+    		index = more;
+    		for(int i = 0; i < more; i++){
+    			
+    			if(i == 0){
+    			
+    				swatch[i] = darkenBy(color, factor);
+    			}
+    			else{
+    				swatch[i] = darkenBy(swatch[i-1], factor);
+    			}
+    		}
+    		swatch[index] = color;
+    		index++;
+    		for(int i = 0; i < less; i++){
+    			
+    			if(i == 0){
+    			
+    				swatch[index] = brightenBy(color, factor);
+    			}
+    			else{
+    				swatch[index] = brightenBy(swatch[index-1], factor);
+    			}
+    			index++;
+    		}
+    		
+    	}
+    	
+
+    	
+    	return new Color[0];
+    }
 
     /**
      * Allows the user to determine the percentage of white to add to the colors in question.
@@ -396,7 +578,28 @@ public interface Swatch {
      * @param factor the percentage of white being added to the color
      * @return a lighter color.
      */
-    Color brightenBy(Color color, float factor);
+    default Color brightenBy(Color color, float factor){
+    	  /*
+         * Steps:
+         * 255 - previous value
+         * multiply by factor
+         * add to previous value
+         */
+    	
+    	//Clean up this later
+        float r1 = (255f - (float)color.getRed()) * (factor);
+        float g1 = (255f - (float)color.getGreen()) * (factor);
+        float b1 = (255f - (float)color.getBlue()) * (factor);
+        
+        //Can combine with above
+        int r = Math.round(r1 + (float)color.getRed());
+        int g = Math.round(g1 + (float)color.getGreen());
+        int b = Math.round(b1 + (float)color.getBlue());
+
+        Color newTint = new Color(r, g, b);
+
+        return newTint;
+    }
 
     /**
      * Allows the user to determine the percentage of black to add to the colors in question.
@@ -405,9 +608,94 @@ public interface Swatch {
      * @param factor the percentage of black being added to the color
      * @return a darker color.
      */
-    Color darkenBy(Color color, float factor);
+    default Color darkenBy(Color color, float factor){
+    	
+    	/*
+         * Steps:
+         * multiply by factor
+         *
+         */
 
+    	//I can probably just do this in one line when I come back to clean up
+        float r1 = (float)color.getRed() * (factor);
+        float g1 = (float)color.getGreen() * (factor);
+        float b1 = (float)color.getBlue() * (factor);
+        
+        //Combine with the above
+        int r = Math.round(r1);
+        int g = Math.round(g1);
+        int b = Math.round(b1);
+        Color newShade =  new Color(r, g, b);
 
+        return newShade;
+    }
+    
+    default float getFactor(){
+    	
+    	/*
+    	 * Get a percentage. Give them options like 1/4, 1/2, and 3/4,
+    	 * and then for custom we'll figure it out later.
+    	 *
+    	 */
+    	JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		frame.setAlwaysOnTop(true);
+		int opt = 0;
+		float factor = 0.25f;
+		String[] options = { "1/4", "1/2", "3/4"};
+		opt = JOptionPane.showOptionDialog(frame, "We change the hue of your color by a factor.\n" +
+		"By what factor would you like your color changed?", "Factor",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+				null, options, options[0]);
+		
+		switch(opt){
+		
+			case 0:
+				
+				factor = 1/4f;
+				
+				break;
+			case 1:
+				
+				factor = 1/2f;
+				
+				break;
+			case 2:
+				
+				factor = 3/4f;
+				
+				break;
+			default:
+				
+				factor = 1/4f;
+				
+				break;
+		
+		}
+    	
+    	return factor;
+    }
+    
+    /**
+     * 
+     * @param color
+     * @return
+     */
+    Color pastelColors(Color color);
+    
+    /**
+     * 
+     * @param color
+     * @return
+     */
+    Color complementaryColors(Color color);
+    
+    /**
+     * 
+     * @return
+     */
+    String toString();
 
 
 }
