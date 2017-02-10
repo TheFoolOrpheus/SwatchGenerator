@@ -139,6 +139,7 @@ public class Palette extends JFrame {
 				 * OK, I need this to draw onto a panel but for now I'm just going to print out
 				 * the color names and shiiiiiii-
 				 */
+				JOptionPane.showMessageDialog(frame, ms.toString());
 				
 			}
 		});

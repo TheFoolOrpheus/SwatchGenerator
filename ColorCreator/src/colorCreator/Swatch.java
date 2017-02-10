@@ -488,7 +488,7 @@ public interface Swatch {
     	}
     	
     	
-    	return new Color[0];
+    	return swatch;
     }
 
     /**
@@ -568,7 +568,7 @@ public interface Swatch {
     	
 
     	
-    	return new Color[0];
+    	return swatch;
     }
 
     /**

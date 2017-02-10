@@ -92,8 +92,6 @@ public class MonochromeSwatch implements Swatch {
                     colors = createColors(baseColor, numColors, factor);
                 }
             }
-            
-            JOptionPane.showMessageDialog(frame, toString());
 
 
     }
