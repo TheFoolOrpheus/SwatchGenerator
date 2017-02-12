@@ -545,46 +545,77 @@ public interface Swatch {
     	int more = (numColors/2) + numColors%2;
     	int less = numColors/2;
     	Color[] swatch = new Color[numColors];
-    	int index;
 
     	//set the first array index to original color
     	swatch[0] = color;
 
     	//Check more tint
-    	if(moreTint) {
+
             //loop until we reach the end of the array.
             for (int i = 1; i < swatch.length; i++) {
-                //Until i = less, darken.
-                if (i <= less) {
-                    swatch[i] = darkenBy(color, factor);
+                /*
+                 * Check moreTint... Here, moreTint is true.
+                 * When it's true, we use less shades, so
+                 * darkenby is dependent on less.
+                 */
+                if (moreTint) {
+                    //Until i = less, darken.
+                    if (i <= less) {
+                        swatch[i] = darkenBy(color, factor);
+                    }
+                    //when i is greater than less, but less than more, lighten
+                    else if (i > less && i < more) {
+                        swatch[i] = brightenBy(color, factor);
+                    }
                 }
-                //when i is greater than less, but less than more, lighten
-                else if (i > less && i < more) {
-                    swatch[i] = brightenBy(color, factor);
+                /*
+                 * Here moreTint is false. When it's false, we use
+                 * more shades, so darkenBy is dependent on more.
+                 */
+                else{
+                    if(i <= more){
+                        swatch[i] = darkenBy(color, factor);
+                    }
+                    //when i is greater than less, but less than more, lighten
+                    else if(i > less && i < more){
+                        swatch[i] = brightenBy(color, factor);
+                    }
                 }
             }
-        }
-        //moreTint == false
-        else{
-            //loop until the end of the array
-    	    for (int i = 1; i < swatch.length; i++){
-    	        //until i = more, darken.
-                if(i <= more){
-                    swatch[i] = darkenBy(color, factor);
-                }
-    	        //when i is greater than less, but less than more, lighten
-                else if(i > less && i < more){
-                    swatch[i] = brightenBy(color, factor);
-                }
 
-            }
+            /*
+             * BubbleSort here:
+             *
+             * Take the length of swatch, make it an int value
+             * create a boolean "swap" == false
+             * do:
+             * -for int i = 1, i < n, i++
+             * -if swatch[i] and swatch[i-1] are out of order swap them.
+             * -update swap to true if swap occured
+             * -end if
+             * end for
+             * while !swap
+             *
+             *
+             * HOW DO I KNOW TWO COLORS ARE OUT OF ORDER?
+             * 1) Check the largest RGB value. If r is the greatest value, only check the r values,
+             * for instance. (What do I do if two values are equal? I'll do that math when I get there.)
+             *
+             * 2) Swap so that colors close that
+             */
 
-        }
-
-
-
-    	
     	return swatch;
+    }
+
+    default boolean swap(Color[] swatch, int init, int fin){
+
+        Color save;
+
+        save = swatch[init];
+        swatch[init] = swatch[fin];
+        swatch[fin] = save;
+
+        return true;
     }
 
     /**
