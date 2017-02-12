@@ -81,9 +81,9 @@ public class Creator extends JFrame {
 					    		" to get used to writing GUIs again.\nI hope it's useful to you, if you" +
 					    		" actually downloaded it! (Thanks for that!)\nI don't plan on making many" +
 					    		" updates unless it's of particular use to anyone, so if you would like more\n" +
-					    		" please let me know. As far as I can tell, there will probably be about " +
-								"three total updates spread out over\n a few months. I am pretty aware that this" +
-								" isn't the world's best swatch generator, so criticism is necessary! \nThanks! -404");
+					    		"please let me know. As far as I can tell, there will probably be about " +
+								"three total updates spread out over\na few months. I am pretty aware that this" +
+								" isn't the world's best swatch generator, so criticism is necessary!\nThanks! -404");
 				
 				
 			}
@@ -102,7 +102,7 @@ public class Creator extends JFrame {
 				"\nA: Sorry about that. I will probably fix that at a later date. Pop-ups happen" +
 				" to be the easiest way for me to get all\nthe information I want out in a hurry." +
 				"\n\nQ: Why is this so ugly?\nA: Ha! Java's default look is kind of gross, isn't it?" +
-				" I can fix that if I move to Javascript or something, but for the\nmoment it's" +
+				" I am planning to rewrite this using Qt eventually... but for the\nmoment it's" +
 				" just gonna have to be gross. Sorry!\n\nQ: How long did this take you?\nA: Hmm." +
 				" It took less than a week to write up a few of the classes for this. The color" +
 				" theory part of this has been\nongoing though, because I didn't study this in school" +
@@ -110,10 +110,9 @@ public class Creator extends JFrame {
 				" if it interests you, my code is stored on GitHub. You can view the repository for" +
 				" this project here:\nhttps://github.com/TheFoolOrpheus/SwatchGenerator\n\nQ: Will you " +
 				"be making anything else?\nA: Yes. But most of what I do isn't stuff that people can play with" +
-				" normally, so I wouldn't get too excited about it. \n\nQ: Can I help?\nA: Like you want to work on"  +
-				" this project? I don't care, it's basically open source if it's on GitHub. Personally I'm not\n" +
-				"looking for help with this project so I'm not asking for help. But you can branch off my project" +
-				" since it isn't private.\n\nQ: Do you have a Patreon/PayPal/Venmo/Other payment method?\nA: I do, but I don't " +
+				" normally, so I wouldn't get too excited about it. \n\nQ: What is the use of this?\nA: I wrote " +
+				"this project for me, essentially. I'm sharing it with you because you guys helped me. It might not" +
+				" help\nyou, but I can always update it to be better.\n\nQ: Do you have a Patreon/PayPal/Venmo/Other payment method?\nA: I do, but I don't " +
 				"really expect to be paid for this, it's more of a gift to Pixilart that happened to coincide " +
 				"with a\ndifferent project I was working on.");
 			}

@@ -498,74 +498,90 @@ public interface Swatch {
      * @return an array of colors
      */
     default Color[] oddCreateColors(boolean moreTint, Color color, int numColors, float factor){
-    	
-    	//numColors = 5
-    	int more = (numColors/2) + numColors%2; // 3 tints
-    	int less = numColors/2; // 2 shades
-    	Color[] swatch = new Color[numColors]; // S1 S2 OC T1 T2 T3
+
+        /*
+         * How it works:
+         * 1) check moreTint. If moreTint == true, use "more" value for tints.
+         * 2) create shades first. Store dark colors in an array called shades. The shades array
+         * creates dark colors as they are created, which is lightest to darkest. This array is
+         * size less.
+         * 3) create tints second. Store tints in an array called tints, for now. this will save
+         * in the correct order. This array is size more.
+         * 4) At the end of the arrays, add all the shades in reverse order to the final array, swatch. then,
+         * add the original colors. Then add all the tints to swatch. Return swatch.
+         * 5) If moreTint == false, use the more value for shades.
+         * 6) Still creating shades first, this time the shades array is of size more.
+         * 7) Tints created second, this time the tints array is of size less.
+         * 8) Add shades in reverse order to swatch, then add original color, then tint. Return swatch.
+         *
+         * NOTES:
+         *
+         * If possible, a sort algorithm would be great here. I think to do that I would need to know how getRGB,
+         * which returns an int, works. Then I would just need to have one array, so, here are the steps for THAT:
+         *
+         * 1) check moreTint. If moreTint == true, use more value for tints. else, use more value for shades.
+         * 2) add the original color to swatch.
+         * 3) create shades, then tints.
+         * 4) run some kind of sort algorithm? Bubble sort takes 2n time... maybe comb sort? I'm never done a comb sort before.
+         *
+         * In order to do the second one, which is better because I don't want to write code forever here, I need to know
+         * how getRGB works AND how combSort works. Best case is n log n, which is good, but... on average it's
+         * n^2/ 2^p, where p = the number of increments.
+         *
+         * The way that I want it to be sorted though, more or less the only values that will need to be sorted are in the beginning
+         * of the list, on average, there will be maybe 2 or three of them...
+         *
+         * So Comb might not be the best sort method here... Maybe just bubble sort? Because like, what should be moving are all at the
+         * beginning of the list and will be swapped with each other.
+         *
+         * Tints are always going to come out in the right order so I feel like a quicksort might not be reasonable. If I made the pivot
+         * the original color... except for the fact that I don't always know where that will lie, 1, and 2 if I add it initially then like
+         * whatever...
+         *
+         * I dunno. Bubble sort for now. If it takes too long or starts getting crazy complex, we switch to a new sorting method.
+         */
+
+
+    	int more = (numColors/2) + numColors%2;
+    	int less = numColors/2;
+    	Color[] swatch = new Color[numColors];
     	int index;
-    	
-    	if(moreTint = true){
-    		index = less;
-    		for(int i = 0; i < less; i++){
-    			
-    			if(i == 0){
-    			
-    				swatch[i] = darkenBy(color, factor);
-    			}
-    			else{
-    				
-    				swatch[i] = darkenBy(swatch[i-1], factor);
-    			}
-    			
-    		}
-    		swatch[index] = color;
-    		index++;
-    		for(int i = 0; i < more; i++){
-    			
-    			if(i == 0){
-    			
-    				swatch[index] = brightenBy(color, factor);
-    				
-    			}
-    			else{
-    				
-    				swatch[index] = brightenBy(swatch[index - 1], factor);
-    				
-    			}
-    			index++;
-    			
-    		}
-    		
-    	}
-    	else{
-    		index = more;
-    		for(int i = 0; i < more; i++){
-    			
-    			if(i == 0){
-    			
-    				swatch[i] = darkenBy(color, factor);
-    			}
-    			else{
-    				swatch[i] = darkenBy(swatch[i-1], factor);
-    			}
-    		}
-    		swatch[index] = color;
-    		index++;
-    		for(int i = 0; i < less; i++){
-    			
-    			if(i == 0){
-    			
-    				swatch[index] = brightenBy(color, factor);
-    			}
-    			else{
-    				swatch[index] = brightenBy(swatch[index-1], factor);
-    			}
-    			index++;
-    		}
-    		
-    	}
-    	
+
+    	//set the first array index to original color
+    	swatch[0] = color;
+
+    	//Check more tint
+    	if(moreTint) {
+            //loop until we reach the end of the array.
+            for (int i = 1; i < swatch.length; i++) {
+                //Until i = less, darken.
+                if (i <= less) {
+                    swatch[i] = darkenBy(color, factor);
+                }
+                //when i is greater than less, but less than more, lighten
+                else if (i > less && i < more) {
+                    swatch[i] = brightenBy(color, factor);
+                }
+            }
+        }
+        //moreTint == false
+        else{
+            //loop until the end of the array
+    	    for (int i = 1; i < swatch.length; i++){
+    	        //until i = more, darken.
+                if(i <= more){
+                    swatch[i] = darkenBy(color, factor);
+                }
+    	        //when i is greater than less, but less than more, lighten
+                else if(i > less && i < more){
+                    swatch[i] = brightenBy(color, factor);
+                }
+
+            }
+
+        }
+
+
 
     	
     	return swatch;
@@ -573,8 +589,8 @@ public interface Swatch {
 
     /**
      * Allows the user to determine the percentage of white to add to the colors in question.
-     * Uses a float because decimal places... might switch to a double, I don't need repeating
-     * numbers all over the place.
+     *
+     * If the color given is white, returns white.
      * @param factor the percentage of white being added to the color
      * @return a lighter color.
      */
@@ -585,18 +601,27 @@ public interface Swatch {
          * multiply by factor
          * add to previous value
          */
-    	
-    	//Clean up this later
-        float r1 = (255f - (float)color.getRed()) * (factor);
-        float g1 = (255f - (float)color.getGreen()) * (factor);
-        float b1 = (255f - (float)color.getBlue()) * (factor);
-        
-        //Can combine with above
-        int r = Math.round(r1 + (float)color.getRed());
-        int g = Math.round(g1 + (float)color.getGreen());
-        int b = Math.round(b1 + (float)color.getBlue());
 
-        Color newTint = new Color(r, g, b);
+        int r;
+        int g;
+        int b;
+        Color newTint;
+
+        if(color == Color.WHITE){
+            newTint = Color.WHITE;
+        }
+        else {
+            //Clean up this later
+            float r1 = (255f - (float) color.getRed()) * (factor);
+            float g1 = (255f - (float) color.getGreen()) * (factor);
+            float b1 = (255f - (float) color.getBlue()) * (factor);
+
+            //Can combine with above
+            r = Math.round(r1 + (float) color.getRed());
+            g = Math.round(g1 + (float) color.getGreen());
+            b = Math.round(b1 + (float) color.getBlue());
+            newTint = new Color(r, g, b);
+        }
 
         return newTint;
     }
@@ -678,11 +703,16 @@ public interface Swatch {
     }
     
     /**
-     * 
+     * pastelColors runs by taking in some color and then running brightenBy.
+     *
+     * It creates a color array from darkest to lightest.
      * @param color
      * @return
      */
-    Color pastelColors(Color color);
+    default Color[] pastelColors(Color color){
+
+        return new Color[0];
+    }
     
     /**
      * 

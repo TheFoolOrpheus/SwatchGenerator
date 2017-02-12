@@ -23,7 +23,7 @@ public class MonochromeSwatch implements Swatch {
      * colors, whether or not the colors should be complementary, and eventually whether or not
      * the palette will be pastel.
      * @param numColors the number of colors the user wants.
-     * @param complementary whether or not the swatch is made of complimentary colors
+     * @param pastel whether or not the swatch is made of pastel colors
      */
     public MonochromeSwatch(int numColors, boolean pastel){
 
@@ -141,10 +141,7 @@ public class MonochromeSwatch implements Swatch {
         return complement;
     }
     
-    public Color pastelColors(Color color){
-    	
-    	return new Color(0,0,0);
-    }
+
     
     public String toString(){
     	
