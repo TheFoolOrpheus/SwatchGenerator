@@ -15,7 +15,7 @@ public class MonochromeSwatch implements Swatch {
      * Default constructor, unsued for now. Not sure if I need it?
      */
     public MonochromeSwatch(boolean complementary){
-    	complementaryColors(baseColor);
+        complementaryColors(baseColor);
     }
 
     /**
@@ -23,7 +23,7 @@ public class MonochromeSwatch implements Swatch {
      * colors, whether or not the colors should be complementary, and eventually whether or not
      * the palette will be pastel.
      * @param numColors the number of colors the user wants.
-     * @param complementary whether or not the swatch is made of complimentary colors
+     * @param pastel whether or not the swatch is made of pastel colors
      */
     public MonochromeSwatch(int numColors, boolean pastel){
 
@@ -49,56 +49,56 @@ public class MonochromeSwatch implements Swatch {
             /*
              * Give the user a choice of entering a hexcode or a RGB value.
              */
-        	int opt = 0;
-            String options[] = {"Yes", "No"};
-            opt = JOptionPane.showOptionDialog(frame, "Do you have a color in mind as your base color?", "Base color",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-            
-            switch(opt){
-            
-            	case 0:       		
-            		baseColor = chooseColor();
-            		break;
-            	case 1:
-            		baseColor = randomColorChooser();
-            		break;
-        		default:
-        			baseColor = randomColorChooser();
-        			break;
-            
-            }
-            
-            JOptionPane.showMessageDialog(frame, "Your base color is " + decimaltoHex(baseColor.getRed(),
-            		baseColor.getGreen(), baseColor.getBlue()));
+        int opt = 0;
+        String options[] = {"Yes", "No"};
+        opt = JOptionPane.showOptionDialog(frame, "Do you have a color in mind as your base color?", "Base color",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
-            //not sure what kind of dialog here
-            if(pastel == true)
-            {
-            	JOptionPane.showMessageDialog(frame, "Running pastelColors." + "\nBase Color: " + decimaltoHex(baseColor.getRed(),
-                		baseColor.getGreen(), baseColor.getBlue()));
-                pastelColors(baseColor);
+        switch(opt){
+
+            case 0:
+                baseColor = chooseColor();
+                break;
+            case 1:
+                baseColor = randomColorChooser();
+                break;
+            default:
+                baseColor = randomColorChooser();
+                break;
+
+        }
+
+        JOptionPane.showMessageDialog(frame, "Your base color is " + decimaltoHex(baseColor.getRed(),
+                baseColor.getGreen(), baseColor.getBlue()));
+
+        //not sure what kind of dialog here
+        if(pastel == true)
+        {
+            JOptionPane.showMessageDialog(frame, "Running pastelColors." + "\nBase Color: " + decimaltoHex(baseColor.getRed(),
+                    baseColor.getGreen(), baseColor.getBlue()));
+            pastelColors(baseColor);
+        }
+        else if(pastel == false){
+
+            JOptionPane.showMessageDialog(frame, "Getting factor.");
+            factor = getFactor();
+
+            //createColors(baseColor, numColors, factor);
+            JOptionPane.showMessageDialog(frame, "Checking to see if odd");
+            if(odd == true){
+                colors = divisionOfColors(numColors, baseColor, factor);
             }
-            else if(pastel == false){
-            	
-            	JOptionPane.showMessageDialog(frame, "Getting factor.");
-            	factor = getFactor();
-            	
-            	//createColors(baseColor, numColors, factor);
-            	JOptionPane.showMessageDialog(frame, "Checking to see if odd");
-                if(odd == true){
-                    colors = divisionOfColors(numColors, baseColor, factor);
-                }
-                else{
-                    colors = createColors(baseColor, numColors, factor);
-                }
+            else{
+                colors = createColors(baseColor, numColors, factor);
             }
+        }
 
 
     }
 
-    
+
     @SuppressWarnings("static-access")
-	public Color complementaryColors(Color color){
+    public Color complementaryColors(Color color){
 
         /*
          * Steps:
@@ -117,48 +117,45 @@ public class MonochromeSwatch implements Swatch {
          * this.
          *
          */
-    	
-    	float[] HSV = getHSV(color);
+
+        float[] HSV = getHSV(color);
 
         Color complement = new Color(0, 0, 0);
-        
+
         int rgbInt = 0;
         float newHue = HSV[0] - 180;
-        
+
         if((newHue) < 360 && (newHue) > 0){
-        	
-        	rgbInt = complement.HSBtoRGB(newHue, HSV[3], HSV[5]);
-        	complement = new Color(rgbInt);
+
+            rgbInt = complement.HSBtoRGB(newHue, HSV[3], HSV[5]);
+            complement = new Color(rgbInt);
         }
         else{
-        	
-        	newHue = HSV[0] + 180;
-        	rgbInt = complement.HSBtoRGB(newHue, HSV[3], HSV[5]);
-        	complement = new Color(rgbInt);
-        	
+
+            newHue = HSV[0] + 180;
+            rgbInt = complement.HSBtoRGB(newHue, HSV[3], HSV[5]);
+            complement = new Color(rgbInt);
+
         }
 
         return complement;
     }
-    
-    public Color pastelColors(Color color){
-    	
-    	return new Color(0,0,0);
-    }
-    
+
+
+
     public String toString(){
-    	
-    	String information = "Colors: ";
-    	
-    	for(int i = 0; i < colors.length; i++)
-    	{
-    		information = information + " " + colorToHex(colors[i]) + " ";
-    	}
-    	
-    	information = information + "\nBase Color: " + colorToHex(baseColor);
-    	
-    	
-    	return information;
+
+        String information = "Colors: ";
+
+        for(int i = 0; i < colors.length; i++)
+        {
+            information = information + " " + colorToHex(colors[i]) + " ";
+        }
+
+        information = information + "\nBase Color: " + colorToHex(baseColor);
+
+
+        return information;
     }
 
 
