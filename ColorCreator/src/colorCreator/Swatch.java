@@ -16,9 +16,6 @@ import java.awt.*;
  */
 public interface Swatch {
 
-
-    Color[] colors = null;
-    Color baseColor = new Color(0,0,0);
     /**
      *
      * When given a color, finds the hexadecimal associated with it.
@@ -199,7 +196,7 @@ public interface Swatch {
          * Asks the user if they want more tints or more shades.
          * After wards, begins processing the colors.
          * Uses the abstract method in swatch, create colors.
-         * Actually, I'm going to make a seperate method called
+         * Actually, I'm going to make a separate method called
          * odd create colors. This method will take in two ints,
          * even and odd, plus a boolean, moreTint. If true, then
          * check which number is larger and use that to create tints.
@@ -215,7 +212,10 @@ public interface Swatch {
     	
     	//First brings up a JOptionPane that asks what the person wants.
     	JFrame frame = new JFrame();
-    	boolean moreTint = false;
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setAlwaysOnTop(true);
+    	boolean moreTint;
     	
     	Object[] options = {"Tints",
         "Shades"};
@@ -243,9 +243,7 @@ public interface Swatch {
     			break;
     		    	
     	}
-    	
-    	//call oddCreateColors
-    	    	
+
     	return oddCreateColors(moreTint, color, numColors, factor);
     }
 
@@ -544,7 +542,7 @@ public interface Swatch {
 
     	int more = (numColors/2) + numColors%2;
     	int less = numColors/2;
-    	Color[] swatch = new Color[numColors];
+    	Color[] swatch = new Color[numColors + 1];
 
     	//set the first array index to original color
     	swatch[0] = color;
@@ -561,11 +559,23 @@ public interface Swatch {
                 if (moreTint) {
                     //Until i = less, darken.
                     if (i <= less) {
-                        swatch[i] = darkenBy(color, factor);
+                        if(i == 1)
+                        {
+                            swatch[i] = darkenBy(color, factor);
+                        }
+                        else {
+                            swatch[i] = darkenBy(swatch[i - 1], factor);
+                        }
                     }
                     //when i is greater than less, but less than more, lighten
-                    else if (i > less && i < more) {
-                        swatch[i] = brightenBy(color, factor);
+                    else if (i > less && i < swatch.length) {
+                        if(i == less + 1)
+                        {
+                            swatch[i] = brightenBy(color, factor);
+                        }
+                        else {
+                            swatch[i] = brightenBy(swatch[i - 1], factor);
+                        }
                     }
                 }
                 /*
@@ -574,11 +584,23 @@ public interface Swatch {
                  */
                 else{
                     if(i <= more){
-                        swatch[i] = darkenBy(color, factor);
+                        if(i == 1)
+                        {
+                            swatch[i] = darkenBy(color, factor);
+                        }
+                        else {
+                            swatch[i] = darkenBy(swatch[i - 1], factor);
+                        }
                     }
                     //when i is greater than less, but less than more, lighten
-                    else if(i > less && i < more){
-                        swatch[i] = brightenBy(color, factor);
+                    else if(i > less && i < swatch.length){
+                        if(i == less + 1)
+                        {
+                            swatch[i] = brightenBy(color, factor);
+                        }
+                        else {
+                            swatch[i] = brightenBy(swatch[i - 1], factor);
+                        }
                     }
                 }
             }
@@ -598,25 +620,29 @@ public interface Swatch {
              *
              *
              * HOW DO I KNOW TWO COLORS ARE OUT OF ORDER?
+             * It largely depends on what type of swatch there is so swap can't be a default method.
+             *
+             * Gaaah. Changing code YET AGAIN.
              * 1) Check the largest RGB value. If r is the greatest value, only check the r values,
              * for instance. (What do I do if two values are equal? I'll do that math when I get there.)
              *
              * 2) Swap so that colors close that
+             *
+             *
              */
 
     	return swatch;
     }
 
-    default boolean swap(Color[] swatch, int init, int fin){
-
-        Color save;
-
-        save = swatch[init];
-        swatch[init] = swatch[fin];
-        swatch[fin] = save;
-
-        return true;
-    }
+    /**
+     * This method is used to swap colors in the swatch array. To make said colors show up in order from darkest to lightest.
+     *
+     * @param swatch the completed swatch, out of order
+     * @param init Not sure right now
+     * @param fin Also not sure, I'm getting there, give me a break
+     * @return This could be void, for the moment whatever.
+     */
+    boolean swap(Color[] swatch, int init, int fin);
 
     /**
      * Allows the user to determine the percentage of white to add to the colors in question.
@@ -670,18 +696,31 @@ public interface Swatch {
          * Steps:
          * multiply by factor
          *
+         * OK, need to check the factor on this one. KEEP IN MIND THE FOLLOWING:
+         * -the smaller the factor, the darker the shade.
+         *
+         * So what I'm going to do is change the factor for darkenby to 1 - factor.
+         * so 1/2 won't change, but 1/4 will become 3/4, and 3/4 will become 1/4.
+         * That should keep the shades and tints progressing at the same rate.
          */
+        Color newShade = new Color(0,0,0);
+
+    	if(color == Color.BLACK){
+    	    return newShade;
+        }
+
+    	float actualFactor = 1f - factor;
 
     	//I can probably just do this in one line when I come back to clean up
-        float r1 = (float)color.getRed() * (factor);
-        float g1 = (float)color.getGreen() * (factor);
-        float b1 = (float)color.getBlue() * (factor);
+        float r1 = (float)color.getRed() * (actualFactor);
+        float g1 = (float)color.getGreen() * (actualFactor);
+        float b1 = (float)color.getBlue() * (actualFactor);
         
         //Combine with the above
         int r = Math.round(r1);
         int g = Math.round(g1);
         int b = Math.round(b1);
-        Color newShade =  new Color(r, g, b);
+        newShade =  new Color(r, g, b);
 
         return newShade;
     }
