@@ -1,12 +1,14 @@
 package colorCreator;
 
-import java.awt.ComponentOrientation;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
-import java.awt.Insets;
+import javax.swing.JColorChooser;
+import javax.swing.colorchooser.ColorSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import net.miginfocom.swing.*;
 
 
 import static java.lang.Integer.parseInt;
@@ -28,6 +30,7 @@ import static java.lang.Integer.parseInt;
 public class Palette extends JFrame {
 
 	boolean complementary = false;
+	JColorChooser panel;
 
 	public Palette(){
 
@@ -88,6 +91,7 @@ public class Palette extends JFrame {
 		c.weightx = c.weighty = 0.0;
 		multi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
+				JOptionPane.showMessageDialog(frame, "Not Yet Implemented");
 
 			}
 		});
@@ -98,6 +102,7 @@ public class Palette extends JFrame {
 		shift.setActionCommand("Hue Shift Ramp");
 		shift.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
+				JOptionPane.showMessageDialog(frame, "Not Yet Implemented");
 
 			}
 		});
@@ -108,7 +113,7 @@ public class Palette extends JFrame {
 		c.weightx = c.weighty = 0.0;
 		this.add(shift, c);
 
-		JColorChooser panel = new JColorChooser();
+		panel = new JColorChooser();
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 5;
@@ -131,13 +136,13 @@ public class Palette extends JFrame {
 		monochrome.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 
-				MonochromeSwatch ms = new MonochromeSwatch(paletteNumber(), complementary);
-				JOptionPane.showMessageDialog(frame, ms.toString());
+				//MonochromeSwatch ms = new MonochromeSwatch(paletteNumber(), complementary);
+				//JOptionPane.showMessageDialog(frame, ms.toString());
 				/*
 				 * To be implemented:
-				 *
-				 * createFrame(1);
 				 */
+				formCreate(1);
+
 
 			}
 		});
@@ -158,7 +163,7 @@ public class Palette extends JFrame {
 		c.weightx = c.weighty = 0.0;
 		adjacent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				isPastel();
+				JOptionPane.showMessageDialog(frame, "Not Yet Implemented");
 			}
 		});
 
@@ -179,7 +184,7 @@ public class Palette extends JFrame {
 		c.weightx = c.weighty = 0.0;
 		triad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				isPastel();
+				JOptionPane.showMessageDialog(frame, "Not Yet Implemented");
 			}
 		});
 
@@ -279,6 +284,7 @@ public class Palette extends JFrame {
 		mainPanel.setLayout(gridBagPanel1);
 		infoPanel.setLayout(gridBagPanel2);
 		frame.setVisible(true);
+		frame.setSize(700,400);
 		mainPanel.setVisible(true);
 		infoPanel.setVisible(true);
 		frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -331,6 +337,32 @@ public class Palette extends JFrame {
 		for(int i = 6; i < 8; i++){pastelColorOptions.add(numColorsButtons[i]);}
 		for(int i = 8; i < 10; i++){shadesTints.add(numColorsButtons[i]);}
 
+		/*
+		 * Creating the header for this thing
+		 */
+		JLabel header;
+		switch(paletteType){
+
+			case 1:
+				header = new JLabel("Monochrome Palette");
+				header.setFont(new Font("Serif", Font.BOLD, 15));
+				break;
+			case 2:
+				header = new JLabel("Default");
+				break;
+			case 3:
+				header = new JLabel("Default");
+				break;
+			case 4:
+				header = new JLabel("Default");
+				break;
+			default:
+				header = new JLabel("Default");
+				break;
+
+		}
+
+
 		JLabel aboutBase = new JLabel("Do you have a base color in mind?");
 		JLabel aboutColors = new JLabel("How many colors would you like made?");
 		JLabel aboutPastel = new JLabel("Do you want a pastel palette?");
@@ -342,13 +374,19 @@ public class Palette extends JFrame {
 		JLabel confirmShades = new JLabel();
 
 
-		c.gridx = 0;
+		c.gridx = 4;
 		c.gridy = 0;
 		c.weightx = c.weighty = 1.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
+		mainPanel.add(header, c);
+
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = c.weighty = 0.0;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		mainPanel.add(aboutBase, c);
 
-		c.gridx = 1;
+		c.gridx = 0;
 		c.gridy = 1;
 		c.weightx = c.weighty = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -382,14 +420,14 @@ public class Palette extends JFrame {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		mainPanel.add(numColorsButtons[5], c);
 
-		c.gridx = 2;
-		c.gridy = 0;
+		c.gridx = 0;
+		c.gridy = 2;
 		c.weightx = c.weighty = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		mainPanel.add(aboutColors,c);
 
-		c.gridx = 3;
-		c.gridy = 1;
+		c.gridx = 0;
+		c.gridy = 3;
 		c.weightx = c.weighty = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		/*
@@ -411,8 +449,8 @@ public class Palette extends JFrame {
 		});
 		mainPanel.add(numColorsButtons[0], c);
 
-		c.gridx = 3;
-		c.gridy = 2;
+		c.gridx = 1;
+		c.gridy = 3;
 		c.weightx = c.weighty = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		/*
@@ -434,8 +472,8 @@ public class Palette extends JFrame {
 		});
 		mainPanel.add(numColorsButtons[1], c);
 
-		c.gridx = 3;
-		c.gridy = 3;
+		c.gridx = 0;
+		c.gridy = 4;
 		c.weightx = c.weighty = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		/*
@@ -457,7 +495,7 @@ public class Palette extends JFrame {
 		});
 		mainPanel.add(numColorsButtons[2], c);
 
-		c.gridx = 3;
+		c.gridx = 1;
 		c.gridy = 4;
 		c.weightx = c.weighty = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -480,14 +518,14 @@ public class Palette extends JFrame {
 		});
 		mainPanel.add(numColorsButtons[3], c);
 
-		c.gridx = 4;
-		c.gridy = 0;
+		c.gridx = 0;
+		c.gridy = 5;
 		c.weightx = c.weighty = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		mainPanel.add(aboutPastel, c);
 
-		c.gridx = 5;
-		c.gridy = 1;
+		c.gridx = 0;
+		c.gridy = 6;
 		c.weightx = c.weighty = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		/*
@@ -513,20 +551,20 @@ public class Palette extends JFrame {
 		mainPanel.add(numColorsButtons[6], c);
 
 		//Everything here should be covered in button 6
-		c.gridx = 5;
-		c.gridy = 2;
+		c.gridx = 1;
+		c.gridy = 6;
 		c.weightx = c.weighty = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		mainPanel.add(numColorsButtons[7], c);
 
-		c.gridx = 6;
-		c.gridy = 0;
+		c.gridx = 0;
+		c.gridy = 7;
 		c.weightx = c.weighty = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		mainPanel.add(aboutShades, c);
 
-		c.gridx = 7;
-		c.gridy = 1;
+		c.gridx = 0;
+		c.gridy = 8;
 		c.weightx = c.weighty = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		/*
@@ -552,8 +590,8 @@ public class Palette extends JFrame {
 		mainPanel.add(numColorsButtons[8], c);
 
 		//Covered in button 8
-		c.gridx = 7;
-		c.gridy = 2;
+		c.gridx = 1;
+		c.gridy = 8;
 		c.weightx = c.weighty = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		mainPanel.add(numColorsButtons[9], c);
@@ -825,6 +863,5 @@ public class Palette extends JFrame {
 		}
 
 	}
-
-
+	
 }
