@@ -605,31 +605,8 @@ public interface Swatch {
                 }
             }
 
-            /*
-             * BubbleSort here:
-             *
-             * Take the length of swatch, make it an int value
-             * create a boolean "swap" == false
-             * do:
-             * -for int i = 1, i < n, i++
-             * -if swatch[i] and swatch[i-1] are out of order swap them.
-             * -update swap to true if swap occured
-             * -end if
-             * end for
-             * while !swap
-             *
-             *
-             * HOW DO I KNOW TWO COLORS ARE OUT OF ORDER?
-             * It largely depends on what type of swatch there is so swap can't be a default method.
-             *
-             * Gaaah. Changing code YET AGAIN.
-             * 1) Check the largest RGB value. If r is the greatest value, only check the r values,
-             * for instance. (What do I do if two values are equal? I'll do that math when I get there.)
-             *
-             * 2) Swap so that colors close that
-             *
-             *
-             */
+
+            swap(swatch,0,0);
 
     	return swatch;
     }
@@ -642,7 +619,7 @@ public interface Swatch {
      * @param fin Also not sure, I'm getting there, give me a break
      * @return This could be void, for the moment whatever.
      */
-    boolean swap(Color[] swatch, int init, int fin);
+    void swap(Color[] swatch, int init, int fin);
 
     /**
      * Allows the user to determine the percentage of white to add to the colors in question.
@@ -773,15 +750,33 @@ public interface Swatch {
     }
     
     /**
-     * pastelColors runs by taking in some color and then running brightenBy.
+     * pastelColors runs by taking in some color and then running brightenBy. It only makes
+     * a palette of brighter colors.
      *
      * It creates a color array from darkest to lightest.
      * @param color
      * @return
      */
-    default Color[] pastelColors(Color color){
+    default Color[] pastelColors(Color color, int numColors){
 
-        return new Color[0];
+        /*
+         * Steps:
+         * 1) create a color[] of size numColors + 1
+         * 2) add the original color as the first color
+         * 3) Run brightenBy. For the time being, using 1/4 as the factor.
+         *
+         */
+
+        Color[] swatch = new Color[numColors + 1];
+        swatch[0] = color;
+
+        for (int i = 1; i < swatch.length; i++){
+
+            swatch[i] = brightenBy(swatch[i-1], 1/4f);
+
+        }
+
+        return swatch;
     }
     
     /**

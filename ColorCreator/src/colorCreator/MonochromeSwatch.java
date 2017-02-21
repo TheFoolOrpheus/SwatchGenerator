@@ -80,7 +80,7 @@ public class MonochromeSwatch implements Swatch {
             {
             	JOptionPane.showMessageDialog(frame, "Running pastelColors." + "\nBase Color: " + decimaltoHex(baseColor.getRed(),
                 		baseColor.getGreen(), baseColor.getBlue()));
-                pastelColors(baseColor);
+                pastelColors(baseColor, numColors);
             }
             else if(pastel == false){
 
@@ -167,7 +167,7 @@ public class MonochromeSwatch implements Swatch {
     }
 
     @Override
-    public boolean swap(Color[] swatch, int init, int fin) {
+    public void swap(Color[] swatch, int init, int fin) {
 
         /*
          *
@@ -185,31 +185,66 @@ public class MonochromeSwatch implements Swatch {
          * new value.
          *
          */
+
         Color start;
+        Color saveTemp;
         float[] startValue;
 
-        start = swatch[0];
-        //Lightness is StartValue[5]
-        startValue = getHSV(start);
 
-        for(int i = 1; i < swatch.length; i++){
-            float[] tempValue = getHSV(swatch[i]);
+        //OK, so here we go.
+        for(int k = 0; k < swatch.length; k++) {
 
-            if(startValue[5] == tempValue[5]){
+            start = swatch[k];
+            //Lightness is StartValue[5]
+            startValue = getHSV(start);
+            int i = k + 1;
 
+            if(i < swatch.length) {
+                do {
+                    float[] tempValue = getHSV(swatch[i]);
+
+                    if (startValue[5] > tempValue[5]) {
+                        saveTemp = swatch[i];
+
+                        swatch[k] = saveTemp;
+                        swatch[i] = start;
+
+
+                    }
+
+                    i++;
+                }
+                while (i < swatch.length);
             }
-            else if(startValue[5] < tempValue[5]){
 
-            }
-            else if(startValue[5] > tempValue[5]){
-                
-            }
+            /*for (int i = 1; i < swatch.length; i++) {
+
+                float[] tempValue = getHSV(swatch[i]);
+
+                if (startValue[5] == tempValue[5]) {
+
+                    //The same color shouldn't be in here twice, but this is in here
+                    //because I KNOW I'll fuck something up.
+
+                } else if (startValue[5] < tempValue[5]) {
+
+                    //if the temp value is higher, don't move, because the higher the lightness
+                    //the brighter the color
+
+                } else if (startValue[5] > tempValue[5]) {
+
+                    //This is the one here... we need to swap the places of the colors.
+                    //First, save the temp color in saveTemp
+                    saveTemp = swatch[i];
+
+                    //Now, replace swatch[k] with
 
 
+                }
+
+
+            }*/
         }
 
-
-
-        return true;
     }
 }
