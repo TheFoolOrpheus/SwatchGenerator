@@ -3,9 +3,7 @@ package colorCreator;
 import java.awt.ComponentOrientation;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 import javax.swing.*;
 import java.awt.Insets;
@@ -38,8 +36,7 @@ public class Palette extends JFrame {
 	}
 	
 	private void paletteWindow(){
-		
-		
+
 		createMenuBar();
 		
 		/*
@@ -126,7 +123,6 @@ public class Palette extends JFrame {
 		 */
 		JButton monochrome = new JButton("Monochrome");
 		monochrome.setActionCommand("Monochrome");
-
 		c.gridx = 0;
 	    c.gridy = 0;
 	    c.gridwidth = 1;
@@ -134,12 +130,14 @@ public class Palette extends JFrame {
 	    c.weightx = c.weighty = 0.0;
 		monochrome.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
+
 				MonochromeSwatch ms = new MonochromeSwatch(paletteNumber(), complementary);
-				/*
-				 * OK, I need this to draw onto a panel but for now I'm just going to print out
-				 * the color names and shiiiiiii-
-				 */
 				JOptionPane.showMessageDialog(frame, ms.toString());
+				/*
+				 * To be implemented:
+				 *
+				 * createFrame(1);
+				 */
 				
 			}
 		});
@@ -160,7 +158,7 @@ public class Palette extends JFrame {
 	    c.weightx = c.weighty = 0.0;
 		adjacent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				isPastel();
+				//isPastel();
 			}
 		});
 
@@ -181,7 +179,7 @@ public class Palette extends JFrame {
 	    c.weightx = c.weighty = 0.0;
 		triad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				isPastel();
+				//isPastel();
 			}
 		});
 
@@ -202,9 +200,11 @@ public class Palette extends JFrame {
 				complementaryOn();
 				if(complementary == true) {
 					JOptionPane.showMessageDialog(frame, "Complementary colors on.");
+					JOptionPane.showMessageDialog(frame, "Currently unavailable.");
 				}
 				else{
 					JOptionPane.showMessageDialog(frame, "Complementary colors off.");
+					JOptionPane.showMessageDialog(frame, "Currently unavailable.");
 				}
 			}
 		});
@@ -243,7 +243,7 @@ public class Palette extends JFrame {
 		setJMenuBar(menuBar);
 	
 	}
-	
+
 	
 	/**
 	 * 
@@ -278,8 +278,7 @@ public class Palette extends JFrame {
 				break;
 				
 			case JOptionPane.CANCEL_OPTION:
-				JOptionPane.showMessageDialog(frame, "Defaulting to non-pastel palette.");
-				pastel = false;
+
 				break;
 			
 			default:

@@ -142,6 +142,7 @@ public interface Swatch {
                                 " color.\nSeparate the values with a \",\" and do not use spaces, like so:\n 10,10,10",
                         "Hexcode", JOptionPane.PLAIN_MESSAGE);
                 String RGB[] = RGBval.split(",");
+                //"\\d{2},\\d{2},\\d{2}"
 
                 try {
                     Color color = new Color(Integer.parseInt(RGB[0]), Integer.parseInt(RGB[1]), Integer.parseInt(RGB[2]));
@@ -248,7 +249,10 @@ public interface Swatch {
     }
 
     /**
+     * This method creates an array with Hue, Saturation (for the HSV, HSI, and HSL models), intensity, and Lightness.
+     * These details should be printed alongside each color eventually.
      *
+     * Lightness is used to make the Monochrome swatch generator ordered from darkest to lightest color.
      * @param color
      * @return HSV, a float array with the following values in order: Hue, Saturation HSV, Saturation HSI,
      * Saturation HSL, Intensity, and Lightness
@@ -533,7 +537,7 @@ public interface Swatch {
          * I dunno. Bubble sort for now. If it takes too long or starts getting crazy complex, we switch to a new sorting method.
          */
 
-
+        //I think this is working but I dislike that an int is rounding a decimal value
     	int more = (numColors/2) + numColors%2;
     	int less = numColors/2;
     	Color[] swatch = new Color[numColors + 1];
@@ -578,17 +582,13 @@ public interface Swatch {
                  */
                 else{
                     if(i <= more){
-                        if(i == 1)
-                        {
-                            swatch[i] = darkenBy(color, factor);
-                        }
-                        else {
-                            swatch[i] = darkenBy(swatch[i - 1], factor);
-                        }
+
+                        swatch[i] = darkenBy(swatch[i - 1], factor);
+
                     }
                     //when i is greater than less, but less than more, lighten
-                    else if(i > less && i < swatch.length){
-                        if(i == less + 1)
+                    else if(i > more && i < swatch.length){
+                        if(i == more + 1)
                         {
                             swatch[i] = brightenBy(color, factor);
                         }

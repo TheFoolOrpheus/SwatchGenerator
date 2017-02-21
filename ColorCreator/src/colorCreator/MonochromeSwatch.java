@@ -218,33 +218,6 @@ public class MonochromeSwatch implements Swatch {
                 while (i < swatch.length);
             }
 
-            /*for (int i = 1; i < swatch.length; i++) {
-
-                float[] tempValue = getHSV(swatch[i]);
-
-                if (startValue[5] == tempValue[5]) {
-
-                    //The same color shouldn't be in here twice, but this is in here
-                    //because I KNOW I'll fuck something up.
-
-                } else if (startValue[5] < tempValue[5]) {
-
-                    //if the temp value is higher, don't move, because the higher the lightness
-                    //the brighter the color
-
-                } else if (startValue[5] > tempValue[5]) {
-
-                    //This is the one here... we need to swap the places of the colors.
-                    //First, save the temp color in saveTemp
-                    saveTemp = swatch[i];
-
-                    //Now, replace swatch[k] with
-
-
-                }
-
-
-            }*/
         }
 
     }
