@@ -133,11 +133,6 @@ public class Palette extends JFrame {
 
 				MonochromeSwatch ms = new MonochromeSwatch(paletteNumber(), complementary);
 				JOptionPane.showMessageDialog(frame, ms.toString());
-				/*
-				 * To be implemented:
-				 *
-				 * createFrame(1);
-				 */
 				
 			}
 		});
@@ -158,7 +153,9 @@ public class Palette extends JFrame {
 	    c.weightx = c.weighty = 0.0;
 		adjacent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				//isPastel();
+				AdjacentSwatch as = new AdjacentSwatch();
+				JOptionPane.showMessageDialog(frame, as.toString());
+
 			}
 		});
 
@@ -198,7 +195,7 @@ public class Palette extends JFrame {
 		compColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				complementaryOn();
-				if(complementary == true) {
+				if(complementary) {
 					JOptionPane.showMessageDialog(frame, "Complementary colors on.");
 					JOptionPane.showMessageDialog(frame, "Currently unavailable.");
 				}
@@ -214,7 +211,7 @@ public class Palette extends JFrame {
 
 	}
 	
-	public void createMenuBar(){
+	private void createMenuBar(){
 		
 		JMenuBar menuBar = new JMenuBar();
 				
@@ -244,7 +241,7 @@ public class Palette extends JFrame {
 	
 	}
 
-	
+
 	/**
 	 * 
 	 * A method that gets the user's input about whether or not they want a pastel 
@@ -302,13 +299,13 @@ public class Palette extends JFrame {
 	 */
 
 	private int paletteNumber(){
-		int colors = 0;
+		int colors;
 
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setAlwaysOnTop(true);
-		int opt = 0;
+		int opt;
 
 		String[] options = { "3", "4", "5", "6", "16", "custom" };
 		opt = JOptionPane.showOptionDialog(frame, "Please choose the size of your palette.", "Number of colors",
@@ -344,10 +341,10 @@ public class Palette extends JFrame {
 				colors = 16;
 				break;
 			case 5:
-				String customNumber = "";
+				String customNumber;
 				//JOptionPane.showMessageDialog(frame, "This is for custom colors. Currently returns 3.");
 				customNumber = JOptionPane.showInputDialog(frame, "Enter the number of colors you " +
-				"would like to generate.", "Custom Value", JOptionPane.PLAIN_MESSAGE);
+				"would like to generate. \nMust be 20 or less.", "Custom Value", JOptionPane.PLAIN_MESSAGE);
 
 				try{
 					int testing;
@@ -361,12 +358,10 @@ public class Palette extends JFrame {
                     }
                     else {
 
-                        JOptionPane.showMessageDialog(frame, "Generating swatch with " + testing +
-                                " colors. UNAVAILABLE, DEFAULTS TO 3");
-
-
-                        //colors = testing;
-                        colors = 3;
+                        //JOptionPane.showMessageDialog(frame, "Generating swatch with " + testing +
+                               // " colors. UNAVAILABLE, DEFAULTS TO 3");
+                        colors = testing;
+                        //colors = 3;
                     }
 				}
 				catch (NumberFormatException nfe){
@@ -402,10 +397,10 @@ public class Palette extends JFrame {
 	 */
 	private void complementaryOn(){
 
-		if(complementary == false){
+		if(!complementary){
 			complementary = true;
 		}
-		else if (complementary == true){
+		else{
 			complementary = false;
 		}
 
