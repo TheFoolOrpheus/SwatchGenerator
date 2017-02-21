@@ -205,6 +205,7 @@ public class MonochromeSwatch implements Swatch {
 
                     if (startValue[5] > tempValue[5]) {
                         saveTemp = swatch[i];
+                        start = swatch[k];
 
                         swatch[k] = saveTemp;
                         swatch[i] = start;

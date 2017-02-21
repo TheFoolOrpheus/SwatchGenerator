@@ -460,31 +460,25 @@ public interface Swatch {
     default Color[] createColors(Color color, int numColors, float factor){
     	
     	int half = numColors/2;
-    	int index = half;
-    	Color[] swatch = new Color[numColors];
-    	
-    	for(int i = 0; i < half; i++){
-    		
-    		if(i == 0){
-    			swatch[i] = darkenBy(color, factor);
-    		}
-    		else{
-    			swatch[i] = darkenBy(swatch[i-1], factor);
-    		}
-    		
+    	int next = half + 1;
+    	Color[] swatch = new Color[numColors + 1];
+
+        swatch[0] = color;
+    	for(int i = 1; i <= half; i++){
+
+            swatch[i] = darkenBy(swatch[i-1], factor);
+
     	}
-    	swatch[index] = color;
-    	index++;
-    	for(int i = half + 1; i < numColors; i++){
-    		if(i == half + 1){
+    	for(int i = next; i <= numColors; i++){
+    		if(i == next){
     			swatch[i] = brightenBy(color, factor);
     		}
     		else{
-    			swatch[i-1] = brightenBy(swatch[index], factor);
+    			swatch[i] = brightenBy(swatch[i - 1], factor);
     		}
-    		index++;
     	}
-    	
+
+    	swap(swatch,0, 0);
     	
     	return swatch;
     }
