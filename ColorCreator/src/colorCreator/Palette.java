@@ -153,7 +153,7 @@ public class Palette extends JFrame {
 	    c.weightx = c.weighty = 0.0;
 		adjacent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				AdjacentSwatch as = new AdjacentSwatch();
+				AdjacentSwatch as = new AdjacentSwatch(paletteNumber());
 				JOptionPane.showMessageDialog(frame, as.toString());
 
 			}

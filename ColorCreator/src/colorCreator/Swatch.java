@@ -2,6 +2,7 @@ package colorCreator;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 /**
  *
@@ -80,12 +81,21 @@ public interface Swatch {
     default Color randomColorChooser()
     {
 
-        int min = 0;
+        //This always gives he color black. ._.
+
+        /*int min = 0;
         int max = 255;
 
         int red = min + (int)Math.random() * ((max - min) + 1);
         int green =  min + (int)Math.random() * ((max - min) + 1);
-        int blue =  min + (int)Math.random() * ((max - min) + 1);
+        int blue =  min + (int)Math.random() * ((max - min) + 1);*/
+
+        Random rand = new Random();
+
+        float red = rand.nextFloat() / 2f + 0.5f;
+        float green = rand.nextFloat()/ 2f + 0.5f;
+        float blue = rand.nextFloat()/ 2f + 0.5f;
+
 
         Color color = new  Color(red, blue, green);
 
