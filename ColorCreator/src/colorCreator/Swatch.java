@@ -633,7 +633,8 @@ public interface Swatch {
      * @return a lighter color.
      */
     default Color brightenBy(Color color, float factor){
-    	  /*
+
+        /*
          * Steps:
          * 255 - previous value
          * multiply by factor

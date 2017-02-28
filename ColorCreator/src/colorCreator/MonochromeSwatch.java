@@ -154,13 +154,42 @@ public class MonochromeSwatch implements Swatch {
     public String toString(){
     	
     	String information = "Colors: ";
+    	boolean printed = false;
+    	String repeatedColors = "";
     	
     	for(int i = 0; i < colors.length; i++)
     	{
-    		information = information + " " + colorToHex(colors[i]) + " ";
+
+            information = information + " " + colorToHex(colors[i]) + " ";
+            /*
+             * This is supposed to remove repeating colors...
+             *
+             * but doing something like color[1] = color[2] doesn't work.
+             * I need to figure out what to do to fix that, but this code only semi works,
+             * it doesn't work for leading repeating values, like 000000? It won't do it.
+             */
+            /*if(i == 0){
+                information = information + " " + colorToHex(colors[i]) + " ";
+            }
+    	    else if(i != 0 && i + 1 < colors.length){
+                if(colors[i + 1] == colors[i]){
+                    repeatedColors = repeatedColors + "Color " + colorToHex(colors[i]) + "repeated.\n";
+                }
+    	        if(colors[i + 1] != colors[i]) {
+                    if(printed == false){
+                        information = information + " " + colorToHex(colors[i]) + " ";
+                    }
+                    else {
+                        repeatedColors = repeatedColors + "Color " + colorToHex(colors[i]) + "repeated.\n";
+                    }
+                }
+            }
+            else if(i == colors.length - 1 && colors[i].getRGB() == colors[i - 1].getRGB()){
+                repeatedColors = repeatedColors + "Color " + colorToHex(colors[i]) + "repeated.\n";
+            }*/
     	}
     	
-    	information = information + "\nBase Color: " + colorToHex(baseColor);
+    	information = information + "\nBase Color: " + colorToHex(baseColor) + "\n" + repeatedColors;
     	
     	
     	return information;
