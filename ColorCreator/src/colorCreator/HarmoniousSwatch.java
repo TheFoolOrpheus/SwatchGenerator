@@ -12,6 +12,51 @@ public class HarmoniousSwatch implements Swatch {
     private Color[] swatch;
     private Color[] baseColors;
 
+    public HarmoniousSwatch(){
+
+    }
+
+    public HarmoniousSwatch(String type){
+        JFrame frame = new JFrame();
+        frame.setLocationRelativeTo(null);
+        frame.setAlwaysOnTop(true);
+
+        /*
+         * Give the user a choice of entering a hexcode or a RGB value.
+         */
+        int opt;
+        String options[] = {"Yes", "No"};
+        opt = JOptionPane.showOptionDialog(frame, "Do you have a color in mind as your mother color?", "Mother color",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+        switch(opt){
+
+            case 0:
+                motherColor = chooseColor();
+                if(motherColor == null){
+                    return;
+                }
+                break;
+            case 1:
+                motherColor = randomColorChooser();
+                if(motherColor == null){
+                    return;
+                }
+                break;
+            default:
+                motherColor = randomColorChooser();
+                if(motherColor == null){
+                    return;
+                }
+                break;
+
+        }
+
+        JOptionPane.showMessageDialog(frame, "Your mother color is " + decimaltoHex(motherColor.getRed(),
+                motherColor.getGreen(), motherColor.getBlue()));
+
+    }
+
     public HarmoniousSwatch(int numColors){
 
         JFrame frame = new JFrame();
