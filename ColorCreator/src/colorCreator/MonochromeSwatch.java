@@ -53,21 +53,30 @@ public class MonochromeSwatch implements Swatch {
             /*
              * Give the user a choice of entering a hexcode or a RGB value.
              */
-        	int opt = 0;
+        	int opt;
             String options[] = {"Yes", "No"};
             opt = JOptionPane.showOptionDialog(frame, "Do you have a color in mind as your base color?", "Base color",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
             
             switch(opt){
             
-            	case 0:       		
-            		baseColor = chooseColor();
+            	case 0:
+            	    baseColor = chooseColor();
+            	    if(baseColor == null){
+            	        return;
+                    }
             		break;
             	case 1:
             		baseColor = randomColorChooser();
+                    if(baseColor == null){
+                        return;
+                    }
             		break;
         		default:
         			baseColor = randomColorChooser();
+                    if(baseColor == null){
+                        return;
+                    }
         			break;
             
             }
@@ -156,11 +165,14 @@ public class MonochromeSwatch implements Swatch {
     	String information = "Colors: ";
     	boolean printed = false;
     	String repeatedColors = "";
-    	
-    	for(int i = 0; i < colors.length; i++)
-    	{
 
-            information = information + " " + colorToHex(colors[i]) + " ";
+    	if(baseColor == null){
+    	    return "There's no baseColor, so a swatch cannot be generated.";
+        }
+    	else {
+            for (int i = 0; i < colors.length; i++) {
+
+                information = information + " " + colorToHex(colors[i]) + " ";
             /*
              * This is supposed to remove repeating colors...
              *
@@ -187,9 +199,10 @@ public class MonochromeSwatch implements Swatch {
             else if(i == colors.length - 1 && colors[i].getRGB() == colors[i - 1].getRGB()){
                 repeatedColors = repeatedColors + "Color " + colorToHex(colors[i]) + "repeated.\n";
             }*/
-    	}
-    	
-    	information = information + "\nBase Color: " + colorToHex(baseColor) + "\n" + repeatedColors;
+            }
+
+            information = information + "\nBase Color: " + colorToHex(baseColor) + "\n" + repeatedColors;
+        }
     	
     	
     	return information;

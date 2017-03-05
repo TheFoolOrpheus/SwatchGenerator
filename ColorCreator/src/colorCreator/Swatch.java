@@ -3,6 +3,8 @@ package colorCreator;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  *
@@ -151,15 +153,48 @@ public interface Swatch {
                 RGBval = JOptionPane.showInputDialog(frame, "Enter the RGB value of your" +
                                 " color.\nSeparate the values with a \",\" and do not use spaces, like so:\n 10,10,10",
                         "Hexcode", JOptionPane.PLAIN_MESSAGE);
-                String RGB[] = RGBval.split(",");
-                //"\\d{2},\\d{2},\\d{2}"
 
-                try {
-                    Color color = new Color(Integer.parseInt(RGB[0]), Integer.parseInt(RGB[1]), Integer.parseInt(RGB[2]));
-                    return color;
-                } catch (Exception e) {
-                    System.err.println("Length of RGB[]: " + RGB.length + "\nItems in RGB[0], RGB[1], and RGB[2]:" +
-                            RGB[0] + " " + RGB[1] + " " + RGB[2] + ".");
+                CharSequence cs = RGBval.subSequence(0, RGBval.length());
+                if(Pattern.matches("\\d{1,3},\\d{1,3},\\d{1,3}",cs)) {
+                    //[0,9]{1,3}[,][0,9]{1,3}[,][0,9]{1,3}
+                    //"\\d{2},\\d{2},\\d{2}"
+
+                    String RGB[] = RGBval.split(",");
+
+                    try {
+
+                        if (Integer.parseInt(RGB[0]) <= 255 || Integer.parseInt(RGB[1]) <= 255 || Integer.parseInt(RGB[2]) <= 255) {
+
+                            Color color = new Color(Integer.parseInt(RGB[0]), Integer.parseInt(RGB[1]), Integer.parseInt(RGB[2]));
+                            return color;
+                        } else {
+                            String incorrectValues = "";
+                            for(int i = 0; i < 3; i++)
+                            {
+                                if(Integer.parseInt(RGB[i]) > 255){
+                                    incorrectValues = incorrectValues + RGB[i];
+                                }
+
+                                if(i == 0){
+                                    incorrectValues =  incorrectValues + " is not a valid red value.\n";
+                                }
+                                else if(i == 1) {
+                                    incorrectValues =  incorrectValues + " is not a valid green value.\n";
+                                }
+                                else if (i == 2){
+                                    incorrectValues =  incorrectValues + " is not a valid blue value.\n";
+                                }
+                            }
+                            JOptionPane.showMessageDialog(frame, "The value of R, G, and B have to be 255 or less.\n" + incorrectValues);
+                        }
+
+                    } catch (Exception e) {
+                        System.err.println("Length of RGB[]: " + RGB.length + "\nItems in RGB[0], RGB[1], and RGB[2]:" +
+                                RGB[0] + " " + RGB[1] + " " + RGB[2] + ".");
+                    }
+                }
+                else{
+                    JOptionPane.showMessageDialog(frame, "Your expression was entered incorrectly.");
                 }
 
                 break;
