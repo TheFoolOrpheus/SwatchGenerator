@@ -143,44 +143,44 @@ public class Palette extends JFrame {
 		 * Creating a adjacent color button. Should pass isPastel and
 		 *  paletteNumber to the adjacent class.
 		 */
-		JButton adjacent = new JButton("Adjacent");
-		adjacent.setActionCommand("Adjacent");
+		JButton harmonies = new JButton("Harmonies");
+		harmonies.setActionCommand("Harmonies");
 
 		c.gridx = 1;
 	    c.gridy = 0;
 	    c.gridwidth = 1;
 	    c.gridheight = 1;
 	    c.weightx = c.weighty = 0.0;
-		adjacent.addActionListener(new ActionListener() {
+		harmonies.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				AdjacentSwatch as = new AdjacentSwatch(paletteNumber());
-				JOptionPane.showMessageDialog(frame, as.toString());
+				HarmoniousSwatch hs = new HarmoniousSwatch(paletteNumber());
+				JOptionPane.showMessageDialog(frame, hs.toString());
 
 			}
 		});
 
-		add(adjacent, c);
+		add(harmonies, c);
 
 
 		/*
 		 * Creating a Triad color button. Should pass isPastel and
 		 *  paletteNumber to the adjacent class.
 		 */
-		JButton triad = new JButton("Triad");
-		triad.setActionCommand("Triad");
+		JButton gradient = new JButton("Gradient");
+		gradient.setActionCommand("Gradient");
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
 	    c.gridy = 0;
 	    c.gridwidth = 1;
 	    c.gridheight = 1;
 	    c.weightx = c.weighty = 0.0;
-		triad.addActionListener(new ActionListener() {
+		gradient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				//isPastel();
 			}
 		});
 
-		add(triad, c);
+		add(gradient, c);
 		
 		/*
 		 * Creating the complementary colors button. Should go across the bottom
@@ -383,6 +383,61 @@ public class Palette extends JFrame {
 
 
 		return colors;
+	}
+
+	/**
+	 * Used in AdjacentSwatch, this is based off of the theories posited here:
+	 *
+	 * http://www.tigercolor.com/color-lab/color-theory/color-harmonies.htm
+	 *
+	 * Essentially, rather than choosing only a number, the user chooses a type of swatch that they
+	 * would like as well. This chooses the colors based on the mother color.
+	 *
+	 * The types are:
+	 * Complimentary: Gets motherColor, adds one more color.
+	 * Analogous: Gets motherColor, adds two more colors.
+	 * Triad: Gets motherColor, adds two more colors.
+	 * Rectangle: Gets motherColor, adds three more colors.
+	 * Square: Gets motherColor, adds three more colors.
+	 * Adjacent: I'm not sure, we'll see.
+	 * @return
+	 */
+	private String paletteType(){
+
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(HIDE_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		frame.setAlwaysOnTop(true);
+		int opt;
+		String type;
+
+		String[] options = { "Complementary", "Analogous", "Triad", "Rectangle", "Square"};
+		opt = JOptionPane.showOptionDialog(frame, "Please choose the size of your palette.", "Number of colors",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+				null, options, options[0]);
+
+		switch (opt){
+			case 0:
+				type = "Complementary";
+				break;
+			case 1:
+				type = "Analogous";
+				break;
+			case 2:
+				type = "Triadic";
+				break;
+			case 3:
+				type = "Rectangle";
+				break;
+			case 4:
+				type = "Square";
+				break;
+			default:
+				type = null;
+				break;
+		}
+
+		return type;
 	}
 
 	/**

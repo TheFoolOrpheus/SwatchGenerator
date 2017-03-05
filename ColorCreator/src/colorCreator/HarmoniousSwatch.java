@@ -6,13 +6,13 @@ import java.awt.*;
 /**
  * Created by adani14 on 2/21/2017.
  */
-public class AdjacentSwatch implements Swatch {
+public class HarmoniousSwatch implements Swatch {
 
     private Color motherColor;
     private Color[] swatch;
     private Color[] baseColors;
 
-    public AdjacentSwatch(int numColors){
+    public HarmoniousSwatch(int numColors){
 
         JFrame frame = new JFrame();
         frame.setLocationRelativeTo(null);
@@ -30,12 +30,21 @@ public class AdjacentSwatch implements Swatch {
 
             case 0:
                 motherColor = chooseColor();
+                if(motherColor == null){
+                    return;
+                }
                 break;
             case 1:
                 motherColor = randomColorChooser();
+                if(motherColor == null){
+                    return;
+                }
                 break;
             default:
                 motherColor = randomColorChooser();
+                if(motherColor == null){
+                    return;
+                }
                 break;
 
         }
