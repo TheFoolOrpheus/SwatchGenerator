@@ -4,7 +4,13 @@ import java.awt.ComponentOrientation;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.*;
-
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import javax.swing.*;
 import java.awt.Insets;
 
@@ -55,6 +61,28 @@ public class Palette extends JFrame {
 		 * 4) Show the user all of the swatches, split by the regular expression
 		 *
 		 */
+		LocalDate ld = LocalDate.now();
+		String fileDate = DateTimeFormatter.ofPattern("ddmmyyyy").format(ld);
+
+		try{
+
+			Files file = new Files();
+			if(file.exists(Paths.get("./swatches"))){
+
+			}
+			else{
+				Path directory = Files.createDirectory(Paths.get("./swatches"));
+			}
+
+
+		}
+		catch(FileAlreadyExistsException faee){
+			faee.getMessage();
+		}
+		catch(IOException ioe){
+			ioe.getMessage();
+		}
+
 		
 		/*
          * OMG GRIDBAG SOLVED

@@ -89,6 +89,10 @@ public class MonochromeSwatch implements Swatch {
                 colors = divisionOfColors(numColors, baseColor, factor);
             }
             else{
+                /*
+                 * This needs to ask about whether the user wants equal tints and shades or more tints
+                 * or more shades.
+                 */
                 colors = createColors(baseColor, numColors, factor);
             }
 
