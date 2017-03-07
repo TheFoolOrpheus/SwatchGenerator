@@ -14,8 +14,8 @@ public class MonochromeSwatch implements Swatch {
     /**
      * Default constructor, unsued for now. Not sure if I need it?
      */
-    public MonochromeSwatch(boolean complementary){
-    	complementaryColors(baseColor);
+    public MonochromeSwatch(){
+
     }
 
     /**
@@ -23,9 +23,8 @@ public class MonochromeSwatch implements Swatch {
      * colors, whether or not the colors should be complementary, and eventually whether or not
      * the palette will be pastel.
      * @param numColors the number of colors the user wants.
-     * @param pastel whether or not the swatch is made of pastel colors
      */
-    public MonochromeSwatch(int numColors, boolean pastel){
+    public MonochromeSwatch(int numColors){
 
 
         /*
@@ -84,73 +83,18 @@ public class MonochromeSwatch implements Swatch {
             JOptionPane.showMessageDialog(frame, "Your base color is " + decimaltoHex(baseColor.getRed(),
             		baseColor.getGreen(), baseColor.getBlue()));
 
-            //not sure what kind of dialog here
-            if(pastel == true)
-            {
-            	JOptionPane.showMessageDialog(frame, "Running pastelColors." + "\nBase Color: " + decimaltoHex(baseColor.getRed(),
-                		baseColor.getGreen(), baseColor.getBlue()));
-                pastelColors(baseColor, numColors);
+            factor = getFactor();
+
+            if(odd){
+                colors = divisionOfColors(numColors, baseColor, factor);
             }
-            else if(pastel == false){
-
-            	factor = getFactor();
-
-                if(odd == true){
-                    colors = divisionOfColors(numColors, baseColor, factor);
-                }
-                else{
-                    colors = createColors(baseColor, numColors, factor);
-                }
+            else{
+                colors = createColors(baseColor, numColors, factor);
             }
 
 
+
     }
-
-    
-    @SuppressWarnings("static-access")
-	public Color complementaryColors(Color color){
-
-        /*
-         * Steps:
-         * - Take Hue
-         * - Subtract 180 or add 180 (the number needs to be between 0 and 360)
-         * - Create new color
-         *
-         * OK, so...hue is expressed in degrees, yeah? Red's hue is 0, and cyan is 180.
-         * Green is 120. Blue is 240. Yellow is 60. Magenta is 300. OK, and obv. red is
-         * also 360, but I assume they just go with 0.
-         *
-         * Unfortunately, Color.java doesn't have a getHSV/HSB/HSL method. That means I
-         * have to get those myself via math. So in swatch I'm going to create a default
-         * method that gets these values but the values themselves are float values. I should
-         * consider making this method also a default one? I mean just about every swatch uses
-         * this.
-         *
-         */
-    	
-    	float[] HSV = getHSV(color);
-
-        Color complement = new Color(0, 0, 0);
-        
-        int rgbInt = 0;
-        float newHue = HSV[0] - 180;
-        
-        if((newHue) < 360 && (newHue) > 0){
-        	
-        	rgbInt = complement.HSBtoRGB(newHue, HSV[3], HSV[5]);
-        	complement = new Color(rgbInt);
-        }
-        else{
-        	
-        	newHue = HSV[0] + 180;
-        	rgbInt = complement.HSBtoRGB(newHue, HSV[3], HSV[5]);
-        	complement = new Color(rgbInt);
-        	
-        }
-
-        return complement;
-    }
-
 
     /**
      * This method needs a rewrite.
@@ -168,6 +112,9 @@ public class MonochromeSwatch implements Swatch {
 
     	if(baseColor == null){
     	    return "There's no baseColor, so a swatch cannot be generated.";
+        }
+        else if(colors == null){
+            return "There is no generated swatch.";
         }
     	else {
             for (int i = 0; i < colors.length; i++) {

@@ -38,6 +38,23 @@ public class Palette extends JFrame {
 	private void paletteWindow(){
 
 		createMenuBar();
+
+		/*
+		 * Creating a way to save the palettes into a text file.
+		 * This should append depending on date... so, it should:
+		 * 1) get today's date
+		 * 2) create a file based on today's date
+		 * 3) add the new swatch to the text file
+		 *
+		 * Then, the old complementary button will become a "Saved
+		 * Swatch" button. This will:
+		 *
+		 * 1) Ask the user to pick a file (jFileChooser)
+		 * 2) After the file is chosen, look for a regular expression
+		 * 3) Split the file based on that regular expression
+		 * 4) Show the user all of the swatches, split by the regular expression
+		 *
+		 */
 		
 		/*
          * OMG GRIDBAG SOLVED
@@ -63,7 +80,7 @@ public class Palette extends JFrame {
 		//Prev. size 1000 x 1000
 		setSize(575,600);
 		setLocationRelativeTo(null);
-		setAlwaysOnTop(true);
+		setAlwaysOnTop(false);
 		setVisible(true);
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		setResizable(false);
@@ -131,7 +148,7 @@ public class Palette extends JFrame {
 		monochrome.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 
-				MonochromeSwatch ms = new MonochromeSwatch(paletteNumber(), complementary);
+				MonochromeSwatch ms = new MonochromeSwatch(paletteNumber());
 				JOptionPane.showMessageDialog(frame, ms.toString());
 				
 			}
@@ -176,7 +193,7 @@ public class Palette extends JFrame {
 	    c.weightx = c.weighty = 0.0;
 		gradient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				//isPastel();
+
 			}
 		});
 
@@ -186,23 +203,15 @@ public class Palette extends JFrame {
 		 * Creating the complementary colors button. Should go across the bottom
 		 * entirely but... I mean of course it isn't, I suck at gridBag.
 		 */
-		JButton compColor = new JButton("Complementary Color");
-		compColor.setActionCommand("Complementary Color");
+		JButton compColor = new JButton("Saved Swatches");
+		compColor.setActionCommand("Saved Swatches");
 		c.gridx = 0;
 	    c.gridy = 5;
 	    c.gridwidth = 5;
 	    c.gridheight = 1;
 		compColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				complementaryOn();
-				if(complementary) {
-					JOptionPane.showMessageDialog(frame, "Complementary colors on.");
-					JOptionPane.showMessageDialog(frame, "Currently unavailable.");
-				}
-				else{
-					JOptionPane.showMessageDialog(frame, "Complementary colors off.");
-					JOptionPane.showMessageDialog(frame, "Currently unavailable.");
-				}
+
 			}
 		});
 

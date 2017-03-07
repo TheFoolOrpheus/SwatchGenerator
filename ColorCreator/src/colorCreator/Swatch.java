@@ -85,12 +85,18 @@ public interface Swatch {
 
         //This always gives he color black. ._.
 
-        /*int min = 0;
-        int max = 255;
-
-        int red = min + (int)Math.random() * ((max - min) + 1);
-        int green =  min + (int)Math.random() * ((max - min) + 1);
-        int blue =  min + (int)Math.random() * ((max - min) + 1);*/
+        /*
+         * Eventually I need to add the ability to pick a darker color
+         * but for right now I don't know how I would do that so,
+         * atm it only generates lighter colors at random.
+         *
+         * I'm actually not sure, based on what's written here, but is it
+         * possible for this to create something close to white?
+         *
+         * It would be best if it creates colors that are a little darker, like
+         * colors right in the middle of a gradient from the darkest shade that
+         * isn't black to the lightest shade that isn't white.
+         */
 
         Random rand = new Random();
 
@@ -262,14 +268,14 @@ public interface Swatch {
         frame.setLocationRelativeTo(null);
         frame.setAlwaysOnTop(true);
     	boolean moreTint;
+    	Color[] swatch;
     	
-    	Object[] options = {"Tints",
-        "Shades"};
+    	Object[] options = {"All Tints", "More Tints", " More Shades", "All Shades"};
     	
     	int n = JOptionPane.showOptionDialog(frame,
     		    "You've chosen an odd number of colors. Would you like more tints or shades?",
     		    "Tints and Shades",
-    		    JOptionPane.YES_NO_OPTION,
+    		    JOptionPane.DEFAULT_OPTION,
     		    JOptionPane.QUESTION_MESSAGE,
     		    null,     //do not use a custom Icon
     		    options,  //the titles of buttons
@@ -278,19 +284,29 @@ public interface Swatch {
     	//switch around the answer, use boolean MoreTint
     	switch(n){
     	
-    		case (JOptionPane.YES_OPTION):
+    		case (0):
     			moreTint = true;
+    			swatch = allOneTypeCreateColors(moreTint, color, numColors, factor);
     			break;
-    		case (JOptionPane.NO_OPTION):
-    			moreTint = false;    			
+    		case (1):
+    			moreTint = true;
+                swatch = oddCreateColors(moreTint, color, numColors, factor);
     			break;
+            case (2):
+                moreTint = false;
+                swatch =oddCreateColors(moreTint, color, numColors, factor);
+                break;
+            case (3):
+                moreTint = false;
+                swatch = allOneTypeCreateColors(moreTint, color, numColors, factor);
+                break;
     		default:
-    			moreTint = false;
-    			break;
+    			return null;
+
     		    	
     	}
 
-    	return oddCreateColors(moreTint, color, numColors, factor);
+    	return swatch;
     }
 
     /**
@@ -530,6 +546,38 @@ public interface Swatch {
     	swap(swatch,0, 0);
     	
     	return swatch;
+    }
+
+    /**
+     *
+     * This method generates either all tints or all shades, depending on whether or not moreTint is
+     * true or false. If moreTint is true, then it makes only tints. Otherwize, it prints only shades.
+     *
+     * @param moreTint
+     * @param color
+     * @param numColors
+     * @param factor
+     * @return
+     */
+    default Color[] allOneTypeCreateColors(boolean moreTint, Color color, int numColors, float factor){
+
+        Color[] swatch = new Color[numColors + 1];
+
+        swatch[0] = color;
+        if(moreTint == true){
+            for(int i = 1; i <= numColors; i++){
+                swatch[i] = brightenBy(swatch[i-1], factor);
+            }
+        }
+        else{
+            for(int i = 1; i <= numColors; i++){
+                swatch[i] = darkenBy(swatch[i-1], factor);
+            }
+        }
+
+        swap(swatch,0, 0);
+
+        return swatch;
     }
 
     /**
@@ -818,13 +866,7 @@ public interface Swatch {
 
         return swatch;
     }
-    
-    /**
-     * 
-     * @param color
-     * @return
-     */
-    Color complementaryColors(Color color);
+
     
     /**
      * 

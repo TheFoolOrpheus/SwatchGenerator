@@ -213,7 +213,45 @@ public class HarmoniousSwatch implements Swatch {
      */
     public Color complementaryColors(Color color){
 
-        return new Color(0,0,0);
+        /*
+         * Steps:
+         * - Take Hue
+         * - Subtract 180 or add 180 (the number needs to be between 0 and 360)
+         * - Create new color
+         *
+         * OK, so...hue is expressed in degrees, yeah? Red's hue is 0, and cyan is 180.
+         * Green is 120. Blue is 240. Yellow is 60. Magenta is 300. OK, and obv. red is
+         * also 360, but I assume they just go with 0.
+         *
+         * Unfortunately, Color.java doesn't have a getHSV/HSB/HSL method. That means I
+         * have to get those myself via math. So in swatch I'm going to create a default
+         * method that gets these values but the values themselves are float values. I should
+         * consider making this method also a default one? I mean just about every swatch uses
+         * this.
+         *
+         */
+
+        float[] HSV = getHSV(color);
+
+        Color complement = new Color(0, 0, 0);
+
+        int rgbInt = 0;
+        float newHue = HSV[0] - 180;
+
+        if((newHue) < 360 && (newHue) > 0){
+
+            rgbInt = complement.HSBtoRGB(newHue, HSV[3], HSV[5]);
+            complement = new Color(rgbInt);
+        }
+        else{
+
+            newHue = HSV[0] + 180;
+            rgbInt = complement.HSBtoRGB(newHue, HSV[3], HSV[5]);
+            complement = new Color(rgbInt);
+
+        }
+
+        return complement;
     }
 
     /**
