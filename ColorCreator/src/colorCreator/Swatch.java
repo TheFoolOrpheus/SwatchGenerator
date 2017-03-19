@@ -151,10 +151,7 @@ public interface Swatch {
 
         switch(opt) {
             case 0:
-                /*
-                 * I would like to use the regular expressions \p{punct} and \p{blank} so that spaces can be used as
-                 * well, but for right now let's just stick with this particular implementation.
-                 */
+
                 String RGBval;
                 RGBval = JOptionPane.showInputDialog(frame, "Enter the RGB value of your" +
                                 " color.\nSeparate the values with a \",\" and do not use spaces, like so:\n 10,10,10",
@@ -200,6 +197,10 @@ public interface Swatch {
                     }
                 }
                 else{
+                    /*
+                     * I want to have this run again, like have it run another time instead of saying that the user
+                     * done f'd up. Buuuuut I don't want spaghetti code, so I dunno... maybe this should be a do while?
+                     */
                     JOptionPane.showMessageDialog(frame, "Your expression was entered incorrectly.");
                 }
 

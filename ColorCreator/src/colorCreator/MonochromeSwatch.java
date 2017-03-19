@@ -18,6 +18,18 @@ public class MonochromeSwatch implements Swatch {
 
     }
 
+    /*
+     * Getters and Setters
+     */
+    public Color getBaseColor(){
+        return baseColor;
+    }
+
+    public void setBaseColor(Color c){
+
+        baseColor = c;
+    }
+
     /**
      * This is the constructor I intend to use for the most part, takes in the number of
      * colors, whether or not the colors should be complementary, and eventually whether or not
@@ -30,10 +42,10 @@ public class MonochromeSwatch implements Swatch {
         /*
          *  Ask the user if they want a random color or if they have a base color in mind.
          * - If they don't have a color in mind, run random color chooser.
-         *  - Ask if they like the chosen color.
+         *  - Ask if they like the chosen color. (Not currently implemented, needs a new method)
          *  - If no, re-run the random color chooser.
          * -If they do have a color in mind, have them input the color.
-         * Check complementary. If true, then disregard numColors, run complementaryColors.
+         * Check complementary. If true, then disregard numColors, run complementaryColors. (depreciated)
          * If false, run createColors.
          *
          */
